@@ -23,13 +23,11 @@ jobs:
       - name: Install Dependencies
         run: cd blockchain && npm ci
 
-      - name: Run tests
-        run: cd blockchain && truffle test
-
-      - name: Run Test Coverage
+      - name: Run tests & Generate coverage
         run: cd blockchain && truffle run coverage
 
-      - name: Generate .coveralls.yml file
-        run: cd blockchain && echo "${{ secrets.DOT_COVERALLS_YML }}" > .coveralls.yml
-      - name: Send Coverage Info to CoverAlls
-        run: cd blockchain && cat coverage/lcov.info | npx coveralls
+      - name: Send coverage to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./blockchain/coverage/lcov.info
