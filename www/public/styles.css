@@ -1,13 +1,71 @@
-body {
-  margin: 0;
+.navbar {
+  background-color: #5755d9;
+  color: #ffffff;
+  padding: 0.25em;
 }
 
-.app {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
+.navbar .btn.btn-link {
+  color: #ffffff;
+}
+
+.navbar .btn.btn-link.sitename {
+  font-size: 1.2em;
+}
+
+button {
+  border: none;
+  border-radius: 2px;
+}
+
+.btn.btn-primary:hover {
+  background-color: #5755d9c4;
+}
+
+.container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  max-width: 85%;
+  padding: 3em 0;
+}
+
+.info {
+  font-style: italic;
+  padding: 1em;
+}
+
+#add-candidate {
+  margin: 0.5em 0;
+}
+
+footer {
+  margin: 1em;
+  bottom: 0;
+}
+
+.hour {
+  font-size: 0.8em;
+  color: #ffffff;
+}
+
+.disabled {
+  background-color: #a25959;
+  cursor: not-allowed;
+}
+
+.enabled {
+  background-color: #5b9b5b;
+  cursor: pointer;
+}
+
+.cancel {
+  cursor: pointer;
+}
+
+.cancel:hover {
+  background-color: #f36363;
+}
+
+#noty_layout__topRight {
+  top: 50px !important;
 }
