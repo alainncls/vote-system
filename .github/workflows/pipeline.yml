@@ -3,8 +3,9 @@ name: Build
 on: [push]
 
 jobs:
-  build:
+  build-contracts:
 
+    name: Build smart contracts
     runs-on: ubuntu-latest
 
     steps:
@@ -31,3 +32,24 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./blockchain/coverage/lcov.info
+
+  build-webapp:
+
+    name: Build web application
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup NodeJS 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Show NodeJS version
+        run: npm --version
+
+      - name: Install Dependencies
+        run: cd www && npm ci
+
+      - name: Run tests
+        run: cd www && npm run test
