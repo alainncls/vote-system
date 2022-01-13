@@ -1,5 +1,9 @@
+.DS_Store
 .idea
-build
-node_modules
+*/node_modules
+blockchain/build
+blockchain/types
+.nyc_output
+www/src/config/types
 coverage
 coverage.json
