@@ -4,6 +4,11 @@ const truffleAssert = require('truffle-assertions');
 const FIRST_ELECTION = '0x852c7AAb5F679737c855e5340851C17e0dDcD7C2';
 const SECOND_ELECTION = '0xEd277a007634f7ec775A0DD57868E8CA128D8509';
 
+const FIRST_ELECTION_NAME = 'Election_1'
+const SECOND_ELECTION_NAME = 'Election_2'
+const FIRST_ELECTION_DESCRIPTION = 'Description_1'
+const SECOND_ELECTION_DESCRIPTION = 'Description_2'
+
 contract('Directory', function () {
     let directory;
 
@@ -16,30 +21,30 @@ contract('Directory', function () {
     })
 
     it('should add elections and emit an event', async () => {
-        let tx = await directory.addElection(FIRST_ELECTION);
+        let tx = await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION);
         assert.equal(await directory.getElectionsNumber(), 1, 'After an election is added, the directory should contain 1 election');
-        assert.equal(await directory.elections(0), FIRST_ELECTION, 'After an election is added, the directory should contain the address of this election');
+        assert.isNotNull(await directory.elections(0), 'After an election is added, the directory should contain the address of this election');
 
         truffleAssert.eventEmitted(tx, 'ElectionAdded', (ev) => {
-            return ev.electionAddress === FIRST_ELECTION;
+            return ev.electionName === FIRST_ELECTION_NAME;
         });
 
-        tx = await directory.addElection(SECOND_ELECTION);
+        tx = await directory.addElection(SECOND_ELECTION_NAME, SECOND_ELECTION_DESCRIPTION);
         assert.equal(await directory.getElectionsNumber(), 2, 'After a second election is added, the directory should contain 2 elections');
-        assert.equal(await directory.elections(1), SECOND_ELECTION, 'After a second election is added, the directory should also contain the address of this election');
+        assert.isNotNull(await directory.elections(1), 'After a second election is added, the directory should also contain the address of this election');
 
         truffleAssert.eventEmitted(tx, 'ElectionAdded', (ev) => {
-            return ev.electionAddress === SECOND_ELECTION;
+            return ev.electionName === SECOND_ELECTION_NAME;
         });
     })
 
     it('should remove elections and emit an event', async () => {
-        await directory.addElection(FIRST_ELECTION);
-        await directory.addElection(SECOND_ELECTION);
+        await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION);
+        await directory.addElection(SECOND_ELECTION_NAME, SECOND_ELECTION_DESCRIPTION);
 
         let tx = await directory.removeElection(0);
         assert.equal(await directory.getElectionsNumber(), 1, 'After a deletion, the directory should contain only 1 election');
-        assert.equal(await directory.elections(0), SECOND_ELECTION, 'After a deletion, the directory should not contain the address of the deleted election');
+        assert.isNotNull(await directory.elections(0), 'After a deletion, the directory should only contain the address of the remaining election');
 
         truffleAssert.eventEmitted(tx, 'ElectionRemoved', () => {
             return true;
@@ -54,7 +59,7 @@ contract('Directory', function () {
     })
 
     it('should fail if trying to remove a non-existing election', async () => {
-        await directory.addElection(FIRST_ELECTION);
+        await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION);
 
         await truffleAssert.reverts(directory.removeElection(1), 'Election index out of bound');
     })

@@ -1,16 +1,20 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.11;
 
+import "./Election.sol";
+
 contract Directory {
 
     address[] public elections;
 
-    event ElectionAdded(address indexed electionAddress);
+    event ElectionAdded(address indexed electionAddress, string electionName);
     event ElectionRemoved();
 
-    function addElection(address _electionAddress) public {
-        elections.push(_electionAddress);
-        emit ElectionAdded(_electionAddress);
+    function addElection(string memory _name, string memory _description) public {
+        Election election = new Election(msg.sender, _name, _description);
+        address electionAddress = address(election);
+        elections.push(electionAddress);
+        emit ElectionAdded(electionAddress, _name);
     }
 
     function removeElection(uint _index) public electionExists(_index) {

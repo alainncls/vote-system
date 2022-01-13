@@ -6,7 +6,7 @@ contract('Election', function (accounts) {
     let election;
 
     beforeEach('should setup the contract instance', async () => {
-        election = await Election.new('Election name', 'Election description');
+        election = await Election.new(firstAccount, 'Election name', 'Election description');
     });
 
     it('should initialize the empty election', async () => {

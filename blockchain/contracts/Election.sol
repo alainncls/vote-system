@@ -20,8 +20,8 @@ contract Election {
     event OptionRemoved(address indexed electionAddress, string electionName);
     event VoteCasted(address indexed electionAddress, string electionName, string optionName);
 
-    constructor(string memory _name, string memory _description) {
-        owner = msg.sender;
+    constructor(address _owner, string memory _name, string memory _description) {
+        owner = _owner;
         name = _name;
         description = _description;
         isActive = true;
