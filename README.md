@@ -4,38 +4,30 @@
 [![Coverage Status](https://coveralls.io/repos/github/alainncls/vote-system/badge.svg?branch=github-actions)](https://coveralls.io/github/alainncls/vote-system?branch=github-actions)
 
 This project aims to provide a DApp sample.  
-It allows the user to create "elections", add vote options to these elections and vote on these options.  
+It allows the user to create "elections", add vote options to these elections and vote on these options.
 
-It's composed of 2 main folders:
-1. `blockchain` contains everything regarding smart contracts and their deployment
-2. `webapp` contains the web application  that accesses those smart contracts
-
-## Smart Contracts
-
-These commands are run in the `blockchain` folder
-
-### First use
-
-Install dependencies: `npm install`
-
-### Compile and test the contracts
-
-1. Compile contracts: `truffle compile`
-2. Test contracts: `truffle test`
-3. Generate contracts code coverage: `truffle run coverage`
-
-### Deploy the contracts on Ganache
+## Prerequisites
 
 1. Download and install [Ganache](https://www.trufflesuite.com/ganache)
-2. Launch Ganache (recommendation: create a workspace associated to this project `truffle-config.js` file)
-3. Deploy the contracts: `truffle migrate`
+2. Recommendation: create a workspace associated to this project `truffle-config.js` file, to get better logs
 
-## Web Application
+## How to launch
 
-These commands are run in the `webapp` folder
+This DApp is composed of 2 main folders:
 
-### First use
+* `blockchain` for the smart contracts
+* `www` for the web application
 
-Install dependencies: `npm install`
+### Blockchain part
 
-// TODO: this part is a WIP
+1. Go to the `blockchain` folder and run `npm install`
+2. Start Ganache
+3. Test the contracts with `truffle test`
+4. Deploy the contract via `truffle migrate`
+
+### Web application part
+
+1. Go to the `www` folder and run `npm install`
+2. Test the frontend with `npm run test`
+3. Launch the webapp with `npm run start`
+4. The webapp is available at http://localhost:8080/
