@@ -31,3 +31,12 @@ This DApp is composed of 2 main folders:
 2. Test the frontend with `npm run test`
 3. Launch the webapp with `npm run start`
 4. The webapp is available at http://localhost:8080/
+
+## To Do
+
+* Frontend tests for the services
+* Display the current user address
+* Reload after a vote is cast
+* Display the election owner/creator
+* Option deletion (if owner)
+* Inline the option creation form
