@@ -46,16 +46,13 @@ const viewElections = (elections) => {
             </p>
         </div>`
     }
-    const rows = elections.map(
-        election =>
-            html`
-                <tr>
-                    <td><a href="/${election.address}">${election.name}</a></td>
-                    <td>${election.description}</td>
-                    <td>${election.owner}</td>
-                    <td>${election.options.length}</td>
-                </tr>`
-    )
+    const rows = elections.map(election => html`
+        <tr>
+            <td><a href="/${election.address}">${election.name}</a></td>
+            <td>${election.description}</td>
+            <td>${election.owner}</td>
+            <td>${election.options.length}</td>
+        </tr>`)
     return html` <h1>Choose your election</h1>
     <table class="table">
         <thead>
@@ -78,9 +75,7 @@ const viewCreateElection = (addElection) => {
         async handleEvent(e) {
             e.preventDefault()
             // get submitted data
-            const creationForm = document.getElementById(
-                'creation-election-form'
-            )
+            const creationForm = document.getElementById('creation-election-form')
             const name = creationForm.querySelector('#election-name').value
             const description = creationForm.querySelector('#election-description').value
 
@@ -109,25 +104,43 @@ const viewCreateElection = (addElection) => {
     </form>`
 }
 
-const viewDisplayElection = (election, castVote, hasVoted) => {
-    if (election.options.length === 0) {
-        return html` <h1>Options for election "${election.name}"</h1>
-        <div class="nocontent">
-            <p>There isn't any vote option for this election</p>
-        </div>`
+const viewDisplayElection = (election, castVote, addOptions, hasVoted) => {
+    // clone option fields
+    const addOptionHandler = {
+        handleEvent(e) {
+            e.preventDefault()
+            const creationForm = document.getElementById('add-options-form')
+            const options = creationForm.querySelector('.options')
+            const inputs = creationForm.querySelector('.option')
+            let c = inputs.cloneNode(true)
+            c.querySelectorAll('input').value = ''
+            options.append(c)
+            return
+        },
+    }
+
+    const submitNewOptionHandler = {
+        async handleEvent(e) {
+            e.preventDefault()
+            // get submitted data
+            const form = document.getElementById('add-options-form')
+            const optionsNames = form.querySelectorAll('[name="options"]')
+            const optionsDescription = form.querySelectorAll('[name="description"]')
+            const optionsToAdd = [];
+            for (let i = 0; i < optionsNames.length; i++) {
+                optionsToAdd[i] = {name: optionsNames[i].value, description: optionsDescription[i].value}
+            }
+            // add options
+            await addOptions.addOptions(election.address, optionsToAdd)
+            return
+        },
     }
 
     const castVoteEventCallback = () => {
         new Noty({
-            theme: 'light',
-            type: 'success',
-            layout: 'topRight',
-            text: 'Your vote is confirmed',
-            buttons: [
-                Noty.button('See vote results', 'btn btn-link', () => {
-                    page('/' + election.address)
-                })
-            ]
+            theme: 'light', type: 'success', layout: 'topRight', text: 'Your vote is confirmed', buttons: [Noty.button('See vote results', 'btn btn-link', () => {
+                page('/' + election.address)
+            })]
         }).show()
     }
 
@@ -135,20 +148,18 @@ const viewDisplayElection = (election, castVote, hasVoted) => {
         async handleEvent(e) {
             e.preventDefault()
             const voteBtn = e.target
-            const optionId = voteBtn.dataset.optionId
-            castVote.castVote(
-                election.address,
-                optionId,
-                castVoteEventCallback
-            )
+            console.log('voteBtn', voteBtn)
+            const optionId = voteBtn.dataset.optionid
+            console.log('election.address', election.address)
+            console.log('optionId', optionId)
+            await castVote.castVote(election.address, optionId, castVoteEventCallback)
             e.currentTarget.style.visibility = 'hidden';
         },
     }
 
     const rows = election.options.map((option, index) => {
         const voteBtn = !hasVoted ? html`
-                    <button type="submit" class="btn vote" data-optionId="${index}" @click=${voteHandler}> Vote</button> `
-            : ''
+            <button type="submit" class="btn vote" data-optionid="${index}" @click=${voteHandler}> Vote</button> ` : ''
 
         return html`
             <tr>
@@ -160,14 +171,19 @@ const viewDisplayElection = (election, castVote, hasVoted) => {
             </tr>`
     })
 
-    const alreadyVoted = hasVoted
-        ? html`
-                <div class="info">You've already cast your vote</div>`
-        : ''
+    const alreadyVoted = hasVoted ? html`
+        <div class="info">You've already cast your vote</div>` : ''
+
+    const hasOptions = !election.options || election.options.length === 0 ? html`
+        <div class="nocontent">
+            <p>There isn't any vote option for this election</p>
+        </div>` : ''
 
     return html`<h1>Options in election "${election.name}"</h1>
     <h2>${election.description}</h2>
+    ${hasOptions}
     ${alreadyVoted}
+
     <table class="table">
         <thead>
         <tr>
@@ -181,16 +197,22 @@ const viewDisplayElection = (election, castVote, hasVoted) => {
         <tbody>
         ${rows}
         </tbody>
-    </table>`
+    </table>
+
+    <form id="add-options-form">
+        <div class="options">
+            <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add an option field</button>
+            <div class="form-group option">
+                <label class="form-label" for="option">Option name</label>
+                <input name="options" class="form-input" type="text" id="option" placeholder="Nom"/>
+                <label class="form-label" for="description">Option description</label>
+                <input name="description" class="form-input" type="text" id="description" placeholder="Description"/>
+            </div>
+        </div>
+        <button class="btn btn-primary" id="create-submit" @click=${submitNewOptionHandler}>Add options</button>
+    </form>`
 }
 
 export {
-    layout,
-    header,
-    footer,
-    viewLoading,
-    viewNotFound,
-    viewElections,
-    viewCreateElection,
-    viewDisplayElection,
+    layout, header, footer, viewLoading, viewNotFound, viewElections, viewCreateElection, viewDisplayElection,
 }

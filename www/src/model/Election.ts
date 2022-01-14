@@ -7,12 +7,12 @@ class Election {
     private description: string;
     private options: Option[];
 
-    constructor(address: string, owner: string, name: string, description: string) {
+    constructor(address: string, owner: string, name: string, description: string,options: Option[]) {
         this.address = address
         this.owner = owner
         this.name = name
         this.description = description
-        this.options = []
+        this.options = options
     }
 
     addOption(option: Option): void {

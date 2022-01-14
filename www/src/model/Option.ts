@@ -8,6 +8,14 @@ class Option {
         this.description = description
         this.votesCount = votesCount
     }
+
+    getName(): string {
+        return this.name
+    }
+
+    getDescription(): string {
+        return this.description
+    }
 }
 
 export default Option

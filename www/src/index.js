@@ -13,6 +13,8 @@ import GetElections from "./service/GetElections";
 import GetElection from "./service/GetElection";
 import AddElection from "./service/AddElection";
 import CastVote from "./service/CastVote";
+import AddOptions from "./service/AddOption";
+import GetVoters from "./service/GetVoters";
 
 // bind app
 const wrapper = document.querySelector('#app')
@@ -30,11 +32,14 @@ const displayLoading = () => {
     const etherSigner = provider.getSigner()
     // factory
     const contractFactory = new ContractFactory(etherSigner)
+    const account = await provider.getAccount()
     // services
     const getElection = new GetElection(contractFactory)
     const getElections = new GetElections(contractFactory)
     const addElection = new AddElection(contractFactory)
     const castVote = new CastVote(contractFactory)
+    const addOptions = new AddOptions(contractFactory)
+    const getVoters = new GetVoters(contractFactory)
 
     // Homepage
     page('/', async function () {
@@ -54,11 +59,12 @@ const displayLoading = () => {
 
     // Display election
     page('/:address', async function (ctx) {
-        console.log('Display')
         displayLoading()
         const electionAddress = ctx.params.address
         const election = await getElection.getElection(electionAddress)
-        const view = viewDisplayElection(election, castVote)
+        const voters = await getVoters.getVoters(electionAddress)
+        const hasVoted = voters.includes(account)
+        const view = viewDisplayElection(election, castVote, addOptions, hasVoted)
         render(layout(header(), view, footer()), wrapper)
     })
 
