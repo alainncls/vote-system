@@ -148,10 +148,7 @@ const viewDisplayElection = (election, castVote, addOptions, hasVoted) => {
         async handleEvent(e) {
             e.preventDefault()
             const voteBtn = e.target
-            console.log('voteBtn', voteBtn)
             const optionId = voteBtn.dataset.optionid
-            console.log('election.address', election.address)
-            console.log('optionId', optionId)
             await castVote.castVote(election.address, optionId, castVoteEventCallback)
             e.currentTarget.style.visibility = 'hidden';
         },

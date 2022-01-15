@@ -51,7 +51,6 @@ const displayLoading = () => {
 
     // Create election
     page('/new', async function () {
-        console.log('new')
         displayLoading()
         const view = viewCreateElection(addElection)
         render(layout(header(), view, footer()), wrapper)
