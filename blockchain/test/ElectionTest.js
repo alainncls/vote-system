@@ -2,7 +2,7 @@ const Election = artifacts.require('Election');
 const truffleAssert = require('truffle-assertions');
 
 contract('Election', function (accounts) {
-    const [firstAccount] = accounts;
+    const [firstAccount, secondAccount] = accounts;
     let election;
 
     beforeEach('should setup the contract instance', async () => {
@@ -104,6 +104,15 @@ contract('Election', function (accounts) {
         assert.equal(await election.voters(0), firstAccount, 'After a vote is casted, voter\'s address should be saved');
 
         await truffleAssert.reverts(election.castVote(1), 'This user has already casted his vote');
+    })
+
+    it('should fail if non-owner tries to add an option', async () => {
+        await truffleAssert.reverts(election.addOption('Option 1', 'Description 1', {from: secondAccount}), 'Only owner can do this');
+    })
+
+    it('should fail if non-owner tries to remove an option', async () => {
+        await election.addOption('Option 1', 'Description 1');
+        await truffleAssert.reverts(election.removeOption(0, {from: secondAccount}), 'Only owner can do this');
     })
 
 })

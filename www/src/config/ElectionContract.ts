@@ -14,9 +14,7 @@ class ElectionContract {
     }
 
     async addOption(rawOption: any): Promise<boolean> {
-        console.log('rawOption',rawOption)
         const option: Option = new Option(rawOption.name, rawOption.description, 0)
-        console.log('option',option)
         const transaction: ContractTransaction = await this.contract.addOption(option.getName(), option.getDescription())
         const receipt: ContractReceipt = await transaction.wait(1)
         const event: Event = receipt.events.pop()
@@ -52,7 +50,7 @@ class ElectionContract {
     }
 
     async getVoter(index: number): Promise<string> {
-        return await this.contract.voters(index)
+        return this.contract.voters(index)
     }
 
     async getDetails(): Promise<Election> {
@@ -61,13 +59,15 @@ class ElectionContract {
         if (optionsNumber > 0) {
             for (let i = 0; i < optionsNumber; i++) {
                 const rawOption: any = await this.contract.options(i)
-                console.log('rawOption', rawOption)
                 options.push(new Option(rawOption.name, rawOption.description, rawOption.votesCount))
             }
         }
         return new Election(this.contract.address, await this.contract.owner(), await this.contract.name(), await this.contract.description(), options)
     }
 
+    async getOwner(): Promise<string> {
+        return this.contract.owner()
+    }
 }
 
 export default ElectionContract

@@ -7,7 +7,7 @@ class Election {
     private description: string;
     private options: Option[];
 
-    constructor(address: string, owner: string, name: string, description: string,options: Option[]) {
+    constructor(address: string, owner: string, name: string, description: string, options: Option[]) {
         this.address = address
         this.owner = owner
         this.name = name
@@ -21,6 +21,10 @@ class Election {
 
     getOptions(): Option[] {
         return this.options
+    }
+
+    getOwner(): string {
+        return this.owner
     }
 }
 

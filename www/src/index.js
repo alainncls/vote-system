@@ -65,7 +65,8 @@ const displayLoading = () => {
         const election = await getElection.getElection(electionAddress)
         const voters = await getVoters.getVoters(electionAddress)
         const hasVoted = voters.includes(account)
-        const view = viewDisplayElection(election, castVote, addOptions, removeOption, hasVoted)
+        const isOwner = election.getOwner() === account;
+        const view = viewDisplayElection(election, castVote, addOptions, removeOption, hasVoted, isOwner)
         render(layout(header(), view, footer()), wrapper)
     })
 

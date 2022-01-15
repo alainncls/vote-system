@@ -27,12 +27,12 @@ contract Election {
         isActive = true;
     }
 
-    function addOption(string memory _name, string memory _description) public {
+    function addOption(string memory _name, string memory _description) public isOwner() {
         options.push(Option(_name, _description, 0));
         emit  OptionAdded(address(this), name, _name);
     }
 
-    function removeOption(uint _index) public optionExists(_index) {
+    function removeOption(uint _index) public optionExists(_index) isOwner() {
         for (uint i = _index; i < options.length - 1; i++) {
             options[i] = options[i + 1];
         }
@@ -70,6 +70,11 @@ contract Election {
 
     modifier optionExists(uint _index) {
         require(_index < options.length, "Option index out of bound");
+        _;
+    }
+
+    modifier isOwner() {
+        require(msg.sender == owner, "Only owner can do this");
         _;
     }
 }

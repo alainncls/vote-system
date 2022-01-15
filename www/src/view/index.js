@@ -104,7 +104,7 @@ const viewCreateElection = (addElection) => {
     </form>`
 }
 
-const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted) => {
+const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner) => {
     // clone option fields
     const addOptionHandler = {
         handleEvent(e) {
@@ -112,9 +112,12 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
             const creationForm = document.getElementById('add-options-form')
             const options = creationForm.querySelector('.options')
             const inputs = creationForm.querySelector('.option')
-            let c = inputs.cloneNode(true)
-            c.querySelectorAll('input').value = ''
-            options.append(c)
+            const clones = inputs.cloneNode(true)
+            const newInputs = clones.querySelectorAll('input')
+            for (const input of newInputs) {
+                input.value = ''
+            }
+            options.append(clones)
             return
         },
     }
@@ -166,9 +169,9 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
 
     const rows = election.options.map((option, index) => {
         const voteBtn = !hasVoted ? html`
-            <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote</button>` : ''
-        const removeBtn = html`
-            <button type="submit" class="btn" data-optionid="${index}" @click=${removeOptionHandler}>Delete</button>`
+            <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote</button>` : html`Vote already cast`
+        const removeBtn = isOwner ? html`
+            <button type="submit" class="btn" data-optionid="${index}" @click=${removeOptionHandler}>Delete</button>` : html`Only owner can delete`
 
         return html`
             <tr>
@@ -181,16 +184,27 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
             </tr>`
     })
 
-    const alreadyVoted = hasVoted ? html`
-        <div class="info">You've already cast your vote</div>` : ''
+    const ownership = isOwner ? html`<p>✅ You are the owner of this election</p>` : html`<p>${election.owner} is the owner of this election</p>`
 
-    const hasOptions = !election.options || election.options.length === 0 ? html`
-        <div class="nocontent">
-            <p>There isn't any vote option for this election</p>
-        </div>` : ''
+    const alreadyVoted = hasVoted ? html`<p><span class="text-error">⚠️</span> You've already cast your vote</p>` : html`<p>✅ You can vote on this election</p>`
+
+    const hasOptions = !election.options || election.options.length === 0 ? html`<p>🚨 There isn't any vote option for this election</p>` : ''
+
+    const manageOptions = isOwner ? html`
+        <form id="add-options-form">
+            <div class="options">
+                <div class="form-group form-horizontal option">
+                    <label class="form-label form-inline" for="option"><input name="options" class="form-input form-inline" type="text" id="option" placeholder="Name"/></label>
+                    <label class="form-label form-inline" for="description"><input name="description" class="form-input form-inline" type="text" id="description" placeholder="Description"/></label>
+                </div>
+            </div>
+            <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add more options</button>
+            <button class="btn btn-primary" id="create-submit" @click=${submitNewOptionHandler}>Add these options to the election</button>
+        </form>` : html`<p><span class="text-error">⚠️</span> Only owner can add options</p>`
 
     return html`<h1>Options in election "${election.name}"</h1>
     <h2>${election.description}</h2>
+    ${ownership}
     ${hasOptions}
     ${alreadyVoted}
 
@@ -213,16 +227,8 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
     <hr>
 
     <h3>Add options to this election</h3>
-    <form id="add-options-form">
-        <div class="options">
-            <div class="form-group form-horizontal option">
-                <label class="form-label form-inline" for="option"><input name="options" class="form-input" type="text" id="option" placeholder="Name"/>Option name</label>
-                <label class="form-label form-inline" for="description"><input name="description" class="form-input" type="text" id="description" placeholder="Description"/>Option description</label>
-            </div>
-        </div>
-        <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add more options</button>
-        <button class="btn btn-primary" id="create-submit" @click=${submitNewOptionHandler}>Add these options to the election</button>
-    </form>`
+    ${manageOptions}
+    `
 }
 
 export {

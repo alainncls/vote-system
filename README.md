@@ -38,4 +38,4 @@ This DApp is composed of 2 main folders:
 * Display the current user address
 * Reload after a vote is cast
 * Display the election owner/creator
-* Check if owner before option add/remove
+* Inline election creation form
