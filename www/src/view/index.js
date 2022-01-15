@@ -196,17 +196,18 @@ const viewDisplayElection = (election, castVote, addOptions, hasVoted) => {
         </tbody>
     </table>
 
+    <hr>
+
+    <h3>Add options to this election</h3>
     <form id="add-options-form">
         <div class="options">
-            <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add an option field</button>
-            <div class="form-group option">
-                <label class="form-label" for="option">Option name</label>
-                <input name="options" class="form-input" type="text" id="option" placeholder="Nom"/>
-                <label class="form-label" for="description">Option description</label>
-                <input name="description" class="form-input" type="text" id="description" placeholder="Description"/>
+            <div class="form-group form-horizontal option">
+                <label class="form-label form-inline" for="option"><input name="options" class="form-input" type="text" id="option" placeholder="Name"/>Option name</label>
+                <label class="form-label form-inline" for="description"><input name="description" class="form-input" type="text" id="description" placeholder="Description"/>Option description</label>
             </div>
         </div>
-        <button class="btn btn-primary" id="create-submit" @click=${submitNewOptionHandler}>Add options</button>
+        <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add more options</button>
+        <button class="btn btn-primary" id="create-submit" @click=${submitNewOptionHandler}>Add these options to the election</button>
     </form>`
 }
 
