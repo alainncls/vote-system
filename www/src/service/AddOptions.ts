@@ -9,7 +9,7 @@ class AddOptions {
     }
 
     async addOptions(electionAddress: string, options: Option[]): Promise<void> {
-        const electionContract = await this.contractFactory.createElectionContractFromAddress(electionAddress)
+        const electionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
         for (const option of options) {
             await electionContract.addOption(option)
         }

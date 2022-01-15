@@ -104,7 +104,7 @@ const viewCreateElection = (addElection) => {
     </form>`
 }
 
-const viewDisplayElection = (election, castVote, addOptions, hasVoted) => {
+const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted) => {
     // clone option fields
     const addOptionHandler = {
         handleEvent(e) {
@@ -154,9 +154,21 @@ const viewDisplayElection = (election, castVote, addOptions, hasVoted) => {
         },
     }
 
+    const removeOptionHandler = {
+        async handleEvent(e) {
+            e.preventDefault()
+            const removeBtn = e.target
+            const optionId = removeBtn.dataset.optionid
+            await removeOption.removeOption(election.address, optionId)
+            e.currentTarget.style.visibility = 'hidden';
+        },
+    }
+
     const rows = election.options.map((option, index) => {
         const voteBtn = !hasVoted ? html`
-            <button type="submit" class="btn vote" data-optionid="${index}" @click=${voteHandler}> Vote</button> ` : ''
+            <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote</button>` : ''
+        const removeBtn = html`
+            <button type="submit" class="btn" data-optionid="${index}" @click=${removeOptionHandler}>Delete</button>`
 
         return html`
             <tr>
@@ -165,6 +177,7 @@ const viewDisplayElection = (election, castVote, addOptions, hasVoted) => {
                 <td>${option.description}</td>
                 <td>${option.votesCount}</td>
                 <td>${voteBtn}</td>
+                <td>${removeBtn}</td>
             </tr>`
     })
 
@@ -189,6 +202,7 @@ const viewDisplayElection = (election, castVote, addOptions, hasVoted) => {
             <th>Option description</th>
             <th>Votes number</th>
             <th>Vote</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>

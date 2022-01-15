@@ -13,8 +13,9 @@ import GetElections from "./service/GetElections";
 import GetElection from "./service/GetElection";
 import AddElection from "./service/AddElection";
 import CastVote from "./service/CastVote";
-import AddOptions from "./service/AddOption";
+import AddOptions from "./service/AddOptions";
 import GetVoters from "./service/GetVoters";
+import RemoveOption from "./service/RemoveOption";
 
 // bind app
 const wrapper = document.querySelector('#app')
@@ -39,6 +40,7 @@ const displayLoading = () => {
     const addElection = new AddElection(contractFactory)
     const castVote = new CastVote(contractFactory)
     const addOptions = new AddOptions(contractFactory)
+    const removeOption = new RemoveOption(contractFactory)
     const getVoters = new GetVoters(contractFactory)
 
     // Homepage
@@ -63,7 +65,7 @@ const displayLoading = () => {
         const election = await getElection.getElection(electionAddress)
         const voters = await getVoters.getVoters(electionAddress)
         const hasVoted = voters.includes(account)
-        const view = viewDisplayElection(election, castVote, addOptions, hasVoted)
+        const view = viewDisplayElection(election, castVote, addOptions, removeOption, hasVoted)
         render(layout(header(), view, footer()), wrapper)
     })
 
