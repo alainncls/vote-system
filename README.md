@@ -1,7 +1,7 @@
 # Vote System
 
 [![Build](https://github.com/alainncls/vote-system/actions/workflows/pipeline.yml/badge.svg)](https://github.com/alainncls/vote-system/actions/workflows/pipeline.yml)
-[![Coverage Status](https://coveralls.io/repos/github/alainncls/vote-system/badge.svg?branch=github-actions)](https://coveralls.io/github/alainncls/vote-system?branch=github-actions)
+[![Coverage Status](https://coveralls.io/repos/github/alainncls/vote-system/badge.svg?branch=main)](https://coveralls.io/github/alainncls/vote-system?branch=main)
 
 This project aims to provide a DApp sample.  
 It allows the user to create "elections", add vote options to these elections and vote on these options.
