@@ -39,3 +39,4 @@ This DApp is composed of 2 main folders:
 * Reload after a vote is cast
 * Inline election creation form
 * Display notifications on key events
+* Owner of an election can activate/deactivate the election
