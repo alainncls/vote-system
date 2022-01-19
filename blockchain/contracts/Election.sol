@@ -29,7 +29,7 @@ contract Election {
 
     function addOption(string memory _name, string memory _description) public isOwner() {
         options.push(Option(_name, _description, 0));
-        emit  OptionAdded(address(this), name, _name);
+        emit OptionAdded(address(this), name, _name);
     }
 
     function removeOption(uint _index) public optionExists(_index) isOwner() {
@@ -37,7 +37,7 @@ contract Election {
             options[i] = options[i + 1];
         }
         options.pop();
-        emit  OptionRemoved(address(this), name);
+        emit OptionRemoved(address(this), name);
     }
 
     function castVote(uint _index) public hasNotVoted optionExists(_index) {
