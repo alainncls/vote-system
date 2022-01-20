@@ -1,9 +1,6 @@
 const Directory = artifacts.require('Directory');
 const truffleAssert = require('truffle-assertions');
 
-const FIRST_ELECTION = '0x852c7AAb5F679737c855e5340851C17e0dDcD7C2';
-const SECOND_ELECTION = '0xEd277a007634f7ec775A0DD57868E8CA128D8509';
-
 const FIRST_ELECTION_NAME = 'Election_1'
 const SECOND_ELECTION_NAME = 'Election_2'
 const FIRST_ELECTION_DESCRIPTION = 'Description_1'

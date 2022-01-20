@@ -9,8 +9,8 @@ class GetElection {
     }
 
     async getElection(address: string): Promise<Election> {
-        const electionContract = await this.contractFactory.createElectionContractFromAddress(address)
-        return await electionContract.getDetails()
+        const electionContract = this.contractFactory.createElectionContractFromAddress(address)
+        return electionContract.getDetails()
     }
 }
 

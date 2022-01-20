@@ -8,7 +8,7 @@ class InMemoryDirectoryContract {
         this.electionsContracts = []
     }
 
-    addElection(name, description) {
+    addElection() {
         this.elections.push(hexlify(this.elections.length))
         return Promise.resolve()
     }

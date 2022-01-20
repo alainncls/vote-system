@@ -3,11 +3,11 @@ import page from 'page'
 import Noty from "noty";
 
 // bind app
-const layout = (header, content, footer) => html`
+const layout = (head, content, foot) => html`
     <div class="">
-        <div class="header">${header}</div>
+        <div class="header">${head}</div>
         <div class="container">${content}</div>
-        <div class="footer">${footer}</div>
+        <div class="footer">${foot}</div>
     </div>`
 
 const header = () => html`
@@ -84,7 +84,6 @@ const viewCreateElection = (addElection) => {
 
             // redirect to homepage
             page('/')
-            return
         },
     }
 
@@ -118,7 +117,6 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
                 input.value = ''
             }
             options.append(clones)
-            return
         },
     }
 
@@ -135,7 +133,6 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
             }
             // add options
             await addOptions.addOptions(election.address, optionsToAdd)
-            return
         },
     }
 
