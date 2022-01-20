@@ -40,4 +40,6 @@ This DApp is composed of 2 main folders:
 * Inline election creation form
 * Display notifications on key events
 * Owner of an election can activate/deactivate the election
+* Owner of an election can delete the election
+* Owner of an election can set an ending date for the poll
 * Re-organize/refactor the services: only 2 main services? (Directory & Election)
