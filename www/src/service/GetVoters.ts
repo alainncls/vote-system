@@ -9,9 +9,9 @@ class GetVoters {
     }
 
     async getVoters(electionAddress: string): Promise<string[]> {
-        const electionContract: ElectionContract = await this.contractFactory.createElectionContractFromAddress(electionAddress)
+        const electionContract: ElectionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
         const votersNumber: number = await electionContract.getVotersNumber()
-        const voters: string[] = [];
+        const voters: string[] = []
         for (let i = 0; i < votersNumber; i++) {
             voters.push(await electionContract.getVoter(i))
         }
