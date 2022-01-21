@@ -22,4 +22,15 @@ describe('GetVoters', () => {
         // Then
         expect(voters).to.have.length(0)
     })
+
+    it('should find an array of voters on a election with votes already cast', async () => {
+        // Given
+        const etherSigner = hexlify(10)
+        const electionAddress = hexlify(contractFactory.directory.elections.length)
+        contractFactory.directory.withElectionAndVoters(etherSigner, "Election_Name", "Election_Description")
+        // When
+        const voters = await getVoters.getVoters(electionAddress)
+        // Then
+        expect(voters).to.have.length(2)
+    })
 })

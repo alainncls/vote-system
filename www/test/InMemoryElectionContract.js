@@ -1,4 +1,6 @@
+import {hexlify} from "ethers/lib/utils";
 import {BigNumber} from "ethers";
+import Election from "../src/model/Election";
 
 class InMemoryElectionContract {
     constructor(owner, name, description) {
@@ -8,6 +10,8 @@ class InMemoryElectionContract {
         this.voters = [];
         this.isActive = true;
         this.options = [];
+        this.callback = () => {
+        }
     }
 
     addOption(name, description) {
@@ -15,15 +19,27 @@ class InMemoryElectionContract {
         return Promise.resolve()
     }
 
-    removeOption(index) {
-        this.options.splice(index, 1)
+    removeOption(optionId) {
+        this.options.splice(optionId, 1)
         return Promise.resolve()
     }
 
-    castVote(index, userAddress) {
-        this.options[index].votesCount = this.options[index].votesCount.add(BigNumber.from("1"))
-        this.voters.push(userAddress);
+    castVote(optionId) {
+        this.options[optionId].votesCount++
+        this.voters.push(hexlify(10));
         return Promise.resolve()
+    }
+
+    onVote(optionId, callback) {
+        this.callback = (address) => callback(address, optionId)
+    }
+
+    getVoter(index) {
+        return Promise.resolve(this.voters[index])
+    }
+
+    getDetails() {
+        return new Election(hexlify(10), this.owner, this.name, this.description, this.options)
     }
 
     getOptionsNumber() {

@@ -1,6 +1,6 @@
 import ContractFactory from "../config/ContractFactory";
 
-class AddElection {
+class CastVote {
     private contractFactory: ContractFactory;
 
     constructor(contractFactory: ContractFactory) {
@@ -8,10 +8,10 @@ class AddElection {
     }
 
     async castVote(electionAddress: string, optionId: number, eventVoteListener: any): Promise<void> {
-        const electionContract = await this.contractFactory.createElectionContractFromAddress(electionAddress)
+        const electionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
         electionContract.onVote(optionId, eventVoteListener)
         await electionContract.castVote(optionId)
     }
 }
 
-export default AddElection
+export default CastVote

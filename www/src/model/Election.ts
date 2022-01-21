@@ -26,6 +26,14 @@ class Election {
     getOwner(): string {
         return this.owner
     }
+
+    getName(): string {
+        return this.name
+    }
+
+    getDescription(): string {
+        return this.description
+    }
 }
 
 export default Election
