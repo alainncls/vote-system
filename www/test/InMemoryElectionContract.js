@@ -10,7 +10,7 @@ class InMemoryElectionContract {
         this.voters = [];
         this.isActive = true;
         this.options = [];
-        this.callback = () => {
+        this.callback = () => { // This is intentional
         }
     }
 

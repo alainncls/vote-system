@@ -31,7 +31,7 @@ class DirectoryContract {
     }
 
     async getElectionAddress(index: number): Promise<string> {
-        return await this.contract.elections(index)
+        return this.contract.elections(index)
     }
 
 }
