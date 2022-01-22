@@ -89,17 +89,13 @@ const viewCreateElection = (addElection) => {
 
     return html` <h1>Election creation</h1>
     <form id="creation-election-form">
-        <div class="form-group">
-            <label class="form-label" for="election-name">Election name</label>
-            <input name="name" class="form-input" type="text" id="election-name" placeholder="Name"/>
+
+        <div class="form-group form-horizontal option">
+            <label class="form-label form-inline" for="election-name"><input name="name" class="form-input form-inline" type="text" id="election-name" placeholder="Name"/></label>
+            <label class="form-label form-inline" for="election-description"><input name="description" class="form-input form-inline" type="text" id="election-description" placeholder="Description"/></label>
+            <button class="btn btn-primary form-inline" id="create-submit" @click=${submitHandler}>Create election</button>
         </div>
 
-        <div class="form-group">
-            <label class="form-label" for="election-description">Election description</label>
-            <input name="name" class="form-input" type="text" id="election-description" placeholder="Description"/>
-        </div>
-
-        <button class="btn btn-primary" id="create-submit" @click=${submitHandler}>Create election</button>
     </form>`
 }
 

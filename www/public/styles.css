@@ -80,3 +80,7 @@ hr {
     padding: 0;
     margin: 0;
 }
+
+#create-submit {
+    margin-top: -4px;
+}
