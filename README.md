@@ -34,7 +34,6 @@ This DApp is composed of 2 main folders:
 
 ## To Do
 
-* Frontend tests for the services
 * Display the current user address
 * Reload after a vote is cast
 * Inline election creation form
