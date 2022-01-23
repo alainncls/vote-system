@@ -16,6 +16,8 @@ import CastVote from "./service/CastVote";
 import AddOptions from "./service/AddOptions";
 import GetVoters from "./service/GetVoters";
 import RemoveOption from "./service/RemoveOption";
+import Deactivate from "./service/Deactivate";
+import Activate from "./service/Activate";
 
 // bind app
 const wrapper = document.querySelector('#app')
@@ -42,6 +44,8 @@ const displayLoading = () => {
     const addOptions = new AddOptions(contractFactory)
     const removeOption = new RemoveOption(contractFactory)
     const getVoters = new GetVoters(contractFactory)
+    const activate = new Activate(contractFactory)
+    const deactivate = new Deactivate(contractFactory)
 
     // Homepage
     page('/', async function () {
@@ -66,7 +70,7 @@ const displayLoading = () => {
         const voters = await getVoters.getVoters(electionAddress)
         const hasVoted = voters.includes(account)
         const isOwner = election.getOwner() === account;
-        const view = viewDisplayElection(election, castVote, addOptions, removeOption, hasVoted, isOwner)
+        const view = viewDisplayElection(election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate)
         render(layout(header(), view, footer()), wrapper)
     })
 

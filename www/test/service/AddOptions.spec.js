@@ -17,7 +17,7 @@ describe('AddOptions', () => {
         // Given
         const etherSigner = hexlify(10)
         const electionAddress = hexlify(contractFactory.directory.elections.length)
-        contractFactory.directory.withElection(etherSigner, "Election_Name", "Election_Description")
+        contractFactory.directory.withActiveElection(etherSigner, "Election_Name", "Election_Description")
         const optionsToAdd = [new Option("Option_1", "Description_1", 0), new Option("Option_2", "Description_2", 0)]
         // When
         await addOptions.addOptions(electionAddress, optionsToAdd)

@@ -99,7 +99,7 @@ const viewCreateElection = (addElection) => {
     </form>`
 }
 
-const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner) => {
+const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate) => {
     // clone option fields
     const addOptionHandler = {
         handleEvent(e) {
@@ -150,6 +150,20 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
         },
     }
 
+    const activationHandler = {
+        async handleEvent(e) {
+            e.preventDefault()
+            await activate.activate(election.address)
+        },
+    }
+
+    const deactivationHandler = {
+        async handleEvent(e) {
+            e.preventDefault()
+            await deactivate.deactivate(election.address)
+        },
+    }
+
     const removeOptionHandler = {
         async handleEvent(e) {
             e.preventDefault()
@@ -161,8 +175,10 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
     }
 
     const rows = election.options.map((option, index) => {
+        const isActive = election.isActive ? html`
+            <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote</button>` : html`Election is inactive`
         const voteBtn = !hasVoted ? html`
-            <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote</button>` : html`Vote already cast`
+            ${isActive}` : html`Vote already cast`
         const removeBtn = isOwner ? html`
             <button type="submit" class="btn" data-optionid="${index}" @click=${removeOptionHandler}>Delete</button>` : html`Only owner can delete`
 
@@ -192,8 +208,14 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
                 </div>
             </div>
             <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add more options</button>
-            <button class="btn btn-primary" id="create-submit" @click=${submitNewOptionHandler}>Add these options to the election</button>
+            <button class="btn btn-primary" @click=${submitNewOptionHandler}>Add these options to the election</button>
         </form>` : html`<p><span class="text-error">⚠️</span> Only owner can add options</p>`
+
+    const activationToggle = election.isActive ? html`
+        <button class="btn btn-primary" @click=${deactivationHandler}>Deactivate this election</button>` : html`
+        <button class="btn btn-primary" @click=${activationHandler}>Activate this election</button>`
+
+    const manageElection = isOwner ? html`${activationToggle}` : html`<p><span class="text-error">⚠️</span> Only owner can manage this election</p>`
 
     return html`<h1>Options in election "${election.name}"</h1>
     <h2>${election.description}</h2>
@@ -221,6 +243,9 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
 
     <h3>Add options to this election</h3>
     ${manageOptions}
+
+    <h3>Manage this election</h3>
+    ${manageElection}
     `
 }
 

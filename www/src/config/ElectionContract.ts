@@ -62,11 +62,27 @@ class ElectionContract {
                 options.push(new Option(rawOption.name, rawOption.description, rawOption.votesCount))
             }
         }
-        return new Election(this.contract.address, await this.contract.owner(), await this.contract.name(), await this.contract.description(), options)
+        return new Election(this.contract.address, await this.contract.owner(), await this.contract.name(), await this.contract.description(), options, await this.contract.isActive())
     }
 
     async getOwner(): Promise<string> {
         return this.contract.owner()
+    }
+
+    async activate() {
+        const transaction: ContractTransaction = await this.contract.activate()
+        const receipt: ContractReceipt = await transaction.wait(1)
+        const event: Event = receipt.events.pop()
+        return !!event;
+    }
+
+    async deactivate() {
+        console.log('ElectionContract')
+        const transaction: ContractTransaction = await this.contract.deactivate()
+        const receipt: ContractReceipt = await transaction.wait(1)
+        console.log('receipt', receipt)
+        const event: Event = receipt.events.pop()
+        return !!event;
     }
 }
 

@@ -6,13 +6,15 @@ class Election {
     private name: string;
     private description: string;
     private options: Option[];
+    private isActive: boolean;
 
-    constructor(address: string, owner: string, name: string, description: string, options: Option[]) {
+    constructor(address: string, owner: string, name: string, description: string, options: Option[], isActive: boolean) {
         this.address = address
         this.owner = owner
         this.name = name
         this.description = description
         this.options = options
+        this.isActive = isActive
     }
 
     addOption(option: Option): void {

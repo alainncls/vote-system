@@ -3,12 +3,12 @@ import {BigNumber} from "ethers";
 import Election from "../src/model/Election";
 
 class InMemoryElectionContract {
-    constructor(owner, name, description) {
+    constructor(owner, name, description, isActive) {
         this.owner = owner;
         this.name = name;
         this.description = description;
         this.voters = [];
-        this.isActive = true;
+        this.isActive = isActive;
         this.options = [];
         this.callback = () => { // This is intentional
         }
@@ -39,7 +39,7 @@ class InMemoryElectionContract {
     }
 
     getDetails() {
-        return new Election(hexlify(10), this.owner, this.name, this.description, this.options)
+        return new Election(hexlify(10), this.owner, this.name, this.description, this.options, true)
     }
 
     getOptionsNumber() {
@@ -48,6 +48,16 @@ class InMemoryElectionContract {
 
     getVotersNumber() {
         return Promise.resolve(BigNumber.from(this.voters.length))
+    }
+
+    activate() {
+        this.isActive = true
+        return Promise.resolve()
+    }
+
+    deactivate() {
+        this.isActive = false
+        return Promise.resolve()
     }
 
 }

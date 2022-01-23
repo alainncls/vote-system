@@ -15,8 +15,8 @@ describe('RemoveElection', () => {
     it('should remove an election from the list', async () => {
         // Given
         const etherSigner = hexlify(10)
-        contractFactory.directory.withElection(etherSigner, "Election_Name_1", "Election_Description_1")
-        contractFactory.directory.withElection(etherSigner, "Election_Name_2", "Election_Description_2")
+        contractFactory.directory.withActiveElection(etherSigner, "Election_Name_1", "Election_Description_1")
+        contractFactory.directory.withActiveElection(etherSigner, "Election_Name_2", "Election_Description_2")
         // When
         await removeElection.removeElection(0)
         // Then

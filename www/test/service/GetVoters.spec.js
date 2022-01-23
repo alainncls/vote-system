@@ -16,7 +16,7 @@ describe('GetVoters', () => {
         // Given
         const etherSigner = hexlify(10)
         const electionAddress = hexlify(contractFactory.directory.elections.length)
-        contractFactory.directory.withElection(etherSigner, "Election_Name", "Election_Description")
+        contractFactory.directory.withActiveElection(etherSigner, "Election_Name", "Election_Description")
         // When
         const voters = await getVoters.getVoters(electionAddress)
         // Then

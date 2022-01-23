@@ -19,6 +19,8 @@ contract Election {
     event OptionAdded(address indexed electionAddress, string electionName, string optionName);
     event OptionRemoved(address indexed electionAddress, string electionName);
     event VoteCasted(address indexed electionAddress, string electionName, string optionName);
+    event Activated(address indexed electionAddress);
+    event Deactivated(address indexed electionAddress);
 
     constructor(address _owner, string memory _name, string memory _description) {
         owner = _owner;
@@ -27,12 +29,12 @@ contract Election {
         isActive = true;
     }
 
-    function addOption(string memory _name, string memory _description) public isOwner() {
+    function addOption(string memory _name, string memory _description) public isOwner {
         options.push(Option(_name, _description, 0));
         emit OptionAdded(address(this), name, _name);
     }
 
-    function removeOption(uint _index) public optionExists(_index) isOwner() {
+    function removeOption(uint _index) public optionExists(_index) isOwner {
         for (uint i = _index; i < options.length - 1; i++) {
             options[i] = options[i + 1];
         }
@@ -40,7 +42,7 @@ contract Election {
         emit OptionRemoved(address(this), name);
     }
 
-    function castVote(uint _index) public hasNotVoted optionExists(_index) {
+    function castVote(uint _index) public isElectionActive hasNotVoted optionExists(_index) {
         options[_index].votesCount++;
         voters.push(msg.sender);
         emit VoteCasted(address(this), name, options[_index].name);
@@ -54,7 +56,17 @@ contract Election {
         return voters.length;
     }
 
-    modifier hasNotVoted() {
+    function activate() public isOwner {
+        isActive = true;
+        emit Activated(address(this));
+    }
+
+    function deactivate() public isOwner {
+        isActive = false;
+        emit Deactivated(address(this));
+    }
+
+    modifier hasNotVoted {
         bool hasVoted = false;
         if (voters.length > 0) {
             for (uint i = 0; i < voters.length; i++) {
@@ -73,8 +85,13 @@ contract Election {
         _;
     }
 
-    modifier isOwner() {
+    modifier isOwner {
         require(msg.sender == owner, "Only owner can do this");
+        _;
+    }
+
+    modifier isElectionActive {
+        require(isActive, "This election isn't active");
         _;
     }
 }

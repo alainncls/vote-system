@@ -106,6 +106,13 @@ contract('Election', function (accounts) {
         await truffleAssert.reverts(election.castVote(1), 'This user has already casted his vote');
     })
 
+    it('should fail if trying to vote on an inactive election', async () => {
+        await election.addOption('Option 1', 'Description 1');
+        await election.deactivate();
+
+        await truffleAssert.reverts(election.castVote(0), 'This election isn\'t active');
+    })
+
     it('should fail if non-owner tries to add an option', async () => {
         await truffleAssert.reverts(election.addOption('Option 1', 'Description 1', {from: secondAccount}), 'Only owner can do this');
     })
@@ -115,4 +122,28 @@ contract('Election', function (accounts) {
         await truffleAssert.reverts(election.removeOption(0, {from: secondAccount}), 'Only owner can do this');
     })
 
+    it('should deactivate/activate an election, with events emitted', async () => {
+        const deactivationTx = await election.deactivate();
+
+        assert.equal(await election.isActive(), false, 'Election should be inactive');
+        truffleAssert.eventEmitted(deactivationTx, 'Deactivated', (ev) => {
+            return true;
+        });
+
+        const activationTx = await election.activate();
+
+        assert.equal(await election.isActive(), true, 'Election should be active');
+        truffleAssert.eventEmitted(activationTx, 'Activated', (ev) => {
+            return true;
+        });
+    })
+
+    it('should fail if non-owner tries to deactivate an election', async () => {
+        await truffleAssert.reverts(election.deactivate({from: secondAccount}), 'Only owner can do this');
+    })
+
+    it('should fail if non-owner tries to activate an election', async () => {
+        await election.deactivate({from: firstAccount})
+        await truffleAssert.reverts(election.activate({from: secondAccount}), 'Only owner can do this');
+    })
 })

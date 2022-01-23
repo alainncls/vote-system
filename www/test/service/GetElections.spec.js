@@ -15,8 +15,8 @@ describe('GetElections', () => {
     it('should find all elections', async () => {
         // Given
         const etherSigner = hexlify(10)
-        contractFactory.directory.withElection(etherSigner, "Election_Name_1", "Election_Description_1")
-        contractFactory.directory.withElection(etherSigner, "Election_Name_2", "Election_Description_2")
+        contractFactory.directory.withActiveElection(etherSigner, "Election_Name_1", "Election_Description_1")
+        contractFactory.directory.withActiveElection(etherSigner, "Election_Name_2", "Election_Description_2")
         // When
         const elections = await getElections.getElections()
         // Then
