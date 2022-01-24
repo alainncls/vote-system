@@ -37,6 +37,6 @@ This DApp is composed of 2 main folders:
 * Display the current user address
 * Reload after a vote is cast
 * Display notifications on key events
-* Owner of an election can delete the election
+* Owner of an election can delete the election from the elections list
 * Owner of an election can set an ending date for the poll
 * Re-organize/refactor the services: only 2 main services? (Directory & Election)

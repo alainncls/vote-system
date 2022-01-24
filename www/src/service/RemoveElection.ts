@@ -8,9 +8,23 @@ class RemoveElection {
         this.contractFactory = contractFactory
     }
 
-    async removeElection(index: number): Promise<void> {
+    async removeElectionFromIndex(index: number): Promise<void> {
         const directory: DirectoryContract = this.contractFactory.getDirectoryContract()
         await directory.removeElection(index)
+    }
+
+    async removeElectionFromAddress(address: string): Promise<void> {
+        const directory: DirectoryContract = this.contractFactory.getDirectoryContract()
+        const electionsNumber = await directory.getElectionsNumber()
+
+        for (let i = 0; i < electionsNumber; i++) {
+            const electionAddress = await directory.getElectionAddress(i)
+
+            if (electionAddress === address) {
+                await directory.removeElection(i)
+                break
+            }
+        }
     }
 }
 

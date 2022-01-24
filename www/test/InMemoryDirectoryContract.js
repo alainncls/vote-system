@@ -23,17 +23,21 @@ class InMemoryDirectoryContract {
         return Promise.resolve(BigNumber.from(this.elections.length))
     }
 
+    getElectionAddress(index) {
+        return this.elections[index]
+    }
+
     withActiveElection(etherSigner, electionName, electionDescription) {
         let address = hexlify(this.elections.length);
         this.elections.push(address)
-        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription,true))
+        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription, true))
         return address
     }
 
     withInactiveElection(etherSigner, electionName, electionDescription) {
         let address = hexlify(this.elections.length);
         this.elections.push(address)
-        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription,false))
+        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription, false))
         return address
     }
 

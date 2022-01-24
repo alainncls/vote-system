@@ -99,7 +99,7 @@ const viewCreateElection = (addElection) => {
     </form>`
 }
 
-const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate) => {
+const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate,removeElection) => {
     // clone option fields
     const addOptionHandler = {
         handleEvent(e) {
@@ -164,6 +164,13 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
         },
     }
 
+    const deletionHandler = {
+        async handleEvent(e) {
+            e.preventDefault()
+            await removeElection.removeElectionFromAddress(election.address)
+        },
+    }
+
     const removeOptionHandler = {
         async handleEvent(e) {
             e.preventDefault()
@@ -212,10 +219,13 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
         </form>` : html`<p><span class="text-error">⚠️</span> Only owner can add options</p>`
 
     const activationToggle = election.isActive ? html`
-        <button class="btn btn-primary" @click=${deactivationHandler}>Deactivate this election</button>` : html`
-        <button class="btn btn-primary" @click=${activationHandler}>Activate this election</button>`
+        <button class="btn btn-error mgmt-button" @click=${deactivationHandler}>Deactivate this election</button>` : html`
+        <button class="btn btn-success mgmt-button" @click=${activationHandler}>Activate this election</button>`
 
-    const manageElection = isOwner ? html`${activationToggle}` : html`<p><span class="text-error">⚠️</span> Only owner can manage this election</p>`
+    const deleteElection = html`
+        <button class="btn btn-error mgmt-button" @click=${deletionHandler}>Delete this election</button>`
+
+    const manageElection = isOwner ? html`${activationToggle} ${deleteElection}` : html`<p><span class="text-error">⚠️</span> Only owner can manage this election</p>`
 
     return html`<h1>Options in election "${election.name}"</h1>
     <h2>${election.description}</h2>
