@@ -54,14 +54,14 @@ const displayLoading = () => {
         displayLoading()
         const elections = await getElections.getElections()
         const view = viewElections(elections)
-        render(layout(header(), view, footer()), wrapper)
+        render(layout(header(account), view, footer()), wrapper)
     })
 
     // Create election
     page('/new', async function () {
         displayLoading()
         const view = viewCreateElection(addElection)
-        render(layout(header(), view, footer()), wrapper)
+        render(layout(header(account), view, footer()), wrapper)
     })
 
     // Display election
@@ -73,12 +73,12 @@ const displayLoading = () => {
         const hasVoted = voters.includes(account)
         const isOwner = election.getOwner() === account;
         const view = viewDisplayElection(election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate, removeElection)
-        render(layout(header(), view, footer()), wrapper)
+        render(layout(header(account), view, footer()), wrapper)
     })
 
     // not found
     page('*', function () {
-        render(layout(header(), viewNotFound(), footer()), wrapper)
+        render(layout(header(account), viewNotFound(), footer()), wrapper)
     })
 
     // int router

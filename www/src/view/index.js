@@ -10,15 +10,25 @@ const layout = (head, content, foot) => html`
         <div class="footer">${foot}</div>
     </div>`
 
-const header = () => html`
-    <header class="navbar">
-        <section class="navbar-center">
-            <a href="/" class="btn btn-link sitename">Vote System</a>
-            <a href="/" class="btn btn-link">All Elections</a>
-            <a href="/new" class="btn btn-link">Create Election</a>
-        </section>
-    </header>`
+const header = (userAddress) => {
+    const isConnected = userAddress ? 'online' : 'busy';
 
+    return html`
+        <header class="navbar">
+            <section class="navbar-center">
+                <a href="/" class="btn btn-link sitename">Vote System</a>
+                <a href="/" class="btn btn-link">All Elections</a>
+                <a href="/new" class="btn btn-link">Create Election</a>
+            </section>
+            <section class="navbar-right">
+                <div class="tooltip tooltip-left" data-tooltip="${userAddress}">
+                    <figure class="avatar avatar-l" data-initial="0x">
+                        <i class="avatar-presence ${isConnected}"></i>
+                    </figure>
+                </div>
+            </section>
+        </header>`
+}
 const footer = () => html`
     <footer class="text-center">
         <div>
@@ -99,7 +109,7 @@ const viewCreateElection = (addElection) => {
     </form>`
 }
 
-const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate,removeElection) => {
+const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate, removeElection) => {
     // clone option fields
     const addOptionHandler = {
         handleEvent(e) {

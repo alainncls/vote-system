@@ -25,6 +25,10 @@ button {
     background-color: #5755d9c4;
 }
 
+.avatar {
+    border: 1px solid #ffffff;
+}
+
 .container {
     display: flex;
     flex-direction: column;

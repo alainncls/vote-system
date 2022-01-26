@@ -34,7 +34,6 @@ This DApp is composed of 2 main folders:
 
 ## To Do
 
-* Display the current user address
 * Reload after a vote is cast
 * Display notifications on key events
 * Owner of an election can delete the election from the elections list
