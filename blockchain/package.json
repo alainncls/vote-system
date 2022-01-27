@@ -1,7 +1,7 @@
 {
-  "name": "vote-system",
+  "name": "vote-system-smart-contracts",
   "version": "1.0.0",
-  "description": "DApp to create elections and vote",
+  "description": "DApp to create elections and vote - Smart contracts part",
   "repository": "git@github.com:alainncls/vote-system.git",
   "main": "truffle.js",
   "directories": {
