@@ -79,7 +79,7 @@ const viewElections = (elections) => {
     </table>`
 }
 
-const viewCreateElection = (addElection) => {
+const viewCreateElection = (directory) => {
     // form submission handler
     const submitHandler = {
         async handleEvent(e) {
@@ -90,7 +90,7 @@ const viewCreateElection = (addElection) => {
             const description = creationForm.querySelector('#election-description').value
 
             // create
-            await addElection.addElection(name, description)
+            await directory.addElection(name, description)
 
             // redirect to homepage
             page('/')
@@ -109,7 +109,7 @@ const viewCreateElection = (addElection) => {
     </form>`
 }
 
-const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVoted, isOwner, activate, deactivate, removeElection) => {
+const viewDisplayElection = (election, electionService, hasVoted, isOwner, directoryService) => {
     // clone option fields
     const addOptionHandler = {
         handleEvent(e) {
@@ -138,7 +138,7 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
                 optionsToAdd[i] = {name: optionsNames[i].value, description: optionsDescription[i].value}
             }
             // add options
-            await addOptions.addOptions(election.address, optionsToAdd)
+            await electionService.addOptions(election.address, optionsToAdd)
         },
     }
 
@@ -155,29 +155,28 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
             e.preventDefault()
             const voteBtn = e.target
             const optionId = voteBtn.dataset.optionid
-            await castVote.castVote(election.address, optionId, castVoteEventCallback)
-            e.currentTarget.style.visibility = 'hidden';
+            await electionService.castVote(election.address, optionId, castVoteEventCallback)
         },
     }
 
     const activationHandler = {
         async handleEvent(e) {
             e.preventDefault()
-            await activate.activate(election.address)
+            await electionService.activate(election.address)
         },
     }
 
     const deactivationHandler = {
         async handleEvent(e) {
             e.preventDefault()
-            await deactivate.deactivate(election.address)
+            await electionService.deactivate(election.address)
         },
     }
 
     const deletionHandler = {
         async handleEvent(e) {
             e.preventDefault()
-            await removeElection.removeElectionFromAddress(election.address)
+            await directoryService.removeElectionFromAddress(election.address)
         },
     }
 
@@ -186,8 +185,7 @@ const viewDisplayElection = (election, castVote, addOptions, removeOption, hasVo
             e.preventDefault()
             const removeBtn = e.target
             const optionId = removeBtn.dataset.optionid
-            await removeOption.removeOption(election.address, optionId)
-            e.currentTarget.style.visibility = 'hidden';
+            await electionService.removeOption(election.address, optionId)
         },
     }
 

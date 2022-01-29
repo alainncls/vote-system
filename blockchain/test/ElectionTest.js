@@ -6,15 +6,15 @@ contract('Election', function (accounts) {
     let election;
 
     beforeEach('should setup the contract instance', async () => {
-        election = await Election.new(firstAccount, 'Election name', 'Election description');
+        election = await Election.new(firstAccount, 'ElectionService name', 'ElectionService description');
     });
 
     it('should initialize the empty election', async () => {
-        assert.equal(await election.owner(), firstAccount, 'Election owner should be its deployer');
-        assert.equal(await election.name(), 'Election name', 'Election name should be saved');
-        assert.equal(await election.description(), 'Election description', 'Election description should be saved');
+        assert.equal(await election.owner(), firstAccount, 'ElectionService owner should be its deployer');
+        assert.equal(await election.name(), 'ElectionService name', 'ElectionService name should be saved');
+        assert.equal(await election.description(), 'ElectionService description', 'ElectionService description should be saved');
         assert.equal(await election.getVotersNumber(), 0, 'At first, the election should not contain any voter');
-        assert.equal(await election.isActive(), true, 'Election should be active');
+        assert.equal(await election.isActive(), true, 'ElectionService should be active');
         assert.equal(await election.getOptionsNumber(), 0, 'At first, the election should not contain any option');
     })
 
@@ -27,7 +27,7 @@ contract('Election', function (accounts) {
         assert.equal(option1.votesCount, 0, 'After an option is added, the election should contain this option\'s votes number');
 
         truffleAssert.eventEmitted(tx, 'OptionAdded', (ev) => {
-            return ev.electionAddress === election.address && ev.electionName === 'Election name' && ev.optionName === 'Option 1';
+            return ev.electionAddress === election.address && ev.electionName === 'ElectionService name' && ev.optionName === 'Option 1';
         });
 
         tx = await election.addOption('Option 2', 'Description 2');
@@ -38,7 +38,7 @@ contract('Election', function (accounts) {
         assert.equal(option2.votesCount, 0, 'After an option is added, the election should contain this option\'s votes number');
 
         truffleAssert.eventEmitted(tx, 'OptionAdded', (ev) => {
-            return ev.electionAddress === election.address && ev.electionName === 'Election name' && ev.optionName === 'Option 2';
+            return ev.electionAddress === election.address && ev.electionName === 'ElectionService name' && ev.optionName === 'Option 2';
         });
     })
 
@@ -54,14 +54,14 @@ contract('Election', function (accounts) {
         assert.equal(optionLeft.votesCount, 0, 'After an option is added, the election should contain this option\'s votes number');
 
         truffleAssert.eventEmitted(tx, 'OptionRemoved', (ev) => {
-            return ev.electionAddress === election.address && ev.electionName === 'Election name';
+            return ev.electionAddress === election.address && ev.electionName === 'ElectionService name';
         });
 
         tx = await election.removeOption(0);
         assert.equal(await election.getOptionsNumber(), 0, 'After another deletion, the election should not contain option anymore');
 
         truffleAssert.eventEmitted(tx, 'OptionRemoved', (ev) => {
-            return ev.electionAddress === election.address && ev.electionName === 'Election name';
+            return ev.electionAddress === election.address && ev.electionName === 'ElectionService name';
         });
     })
 
@@ -76,7 +76,7 @@ contract('Election', function (accounts) {
         assert.equal(option2.votesCount, 1, 'After a vote is casted on option 2, it should have a votes count of 1');
 
         truffleAssert.eventEmitted(tx, 'VoteCasted', (ev) => {
-            return ev.electionAddress === election.address && ev.electionName === 'Election name' && ev.optionName === 'Option 2';
+            return ev.electionAddress === election.address && ev.electionName === 'ElectionService name' && ev.optionName === 'Option 2';
         });
 
         assert.equal(await election.getVotersNumber(), 1, 'After a vote is casted, voters number should increase');
@@ -125,14 +125,14 @@ contract('Election', function (accounts) {
     it('should deactivate/activate an election, with events emitted', async () => {
         const deactivationTx = await election.deactivate();
 
-        assert.equal(await election.isActive(), false, 'Election should be inactive');
+        assert.equal(await election.isActive(), false, 'ElectionService should be inactive');
         truffleAssert.eventEmitted(deactivationTx, 'Deactivated', (ev) => {
             return true;
         });
 
         const activationTx = await election.activate();
 
-        assert.equal(await election.isActive(), true, 'Election should be active');
+        assert.equal(await election.isActive(), true, 'ElectionService should be active');
         truffleAssert.eventEmitted(activationTx, 'Activated', (ev) => {
             return true;
         });
