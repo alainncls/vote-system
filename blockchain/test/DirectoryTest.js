@@ -58,7 +58,7 @@ contract('Directory', function () {
     it('should fail if trying to remove a non-existing election', async () => {
         await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION);
 
-        await truffleAssert.reverts(directory.removeElection(1), 'ElectionService index out of bound');
+        await truffleAssert.reverts(directory.removeElection(1), 'Election index out of bound');
     })
 
 })
