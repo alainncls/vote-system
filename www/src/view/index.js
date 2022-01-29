@@ -160,11 +160,7 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
     }
 
     const castVoteEventCallback = () => {
-        new Noty({
-            theme: 'light', type: 'success', layout: 'topRight', text: 'Your vote is confirmed', buttons: [Noty.button('See vote results', 'btn btn-link', () => {
-                page('/' + election.address)
-            })]
-        }).show()
+        new Noty({theme: 'light', type: 'success', layout: 'topRight', text: 'Your vote is confirmed'}).show()
     }
 
     const voteHandler = {
@@ -173,6 +169,7 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
             const voteBtn = e.target
             const optionId = voteBtn.dataset.optionid
             await electionService.castVote(election.address, optionId, castVoteEventCallback)
+            page('/' + election.address)
         },
     }
 

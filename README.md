@@ -34,7 +34,6 @@ This DApp is composed of 2 main folders:
 
 ## To Do
 
-* Reload after a vote is cast
 * Display notifications on key events
 * Owner of an election can set an ending date for the poll
 * Split views in different files?
