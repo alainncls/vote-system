@@ -44,7 +44,7 @@ const viewLoading = () => html`
 const viewNotFound = () => html`
     <div>Not found !</div>`
 
-const viewElections = (elections) => {
+const viewElections = (elections, account, directoryService) => {
     if (elections.length === 0) {
         return html`<h1>List of elections</h1>
         <div class="nocontent">
@@ -56,13 +56,29 @@ const viewElections = (elections) => {
             </p>
         </div>`
     }
-    const rows = elections.map(election => html`
-        <tr>
-            <td><a href="/${election.address}">${election.name}</a></td>
-            <td>${election.description}</td>
-            <td>${election.owner}</td>
-            <td>${election.options.length}</td>
-        </tr>`)
+
+    const deletionHandler = {
+        async handleEvent(e) {
+            e.preventDefault()
+            const removeBtn = e.target
+            const electionId = Number(removeBtn.dataset.electionid)
+            await directoryService.removeElectionFromIndex(electionId)
+        },
+    }
+
+    const rows = elections.map((election, index) => {
+        const removeBtn = election.owner === account ? html`
+            <button type="submit" class="btn" data-electionid="${index}" @click=${deletionHandler}>Delete</button>` : html`Only owner can delete`
+        return html`
+            <tr>
+                <td><a href="/${election.address}">${election.name}</a></td>
+                <td>${election.description}</td>
+                <td>${election.owner}</td>
+                <td>${election.options.length}</td>
+                <td>${removeBtn}</td>
+            </tr>`
+    })
+
     return html` <h1>Choose your election</h1>
     <table class="table">
         <thead>
@@ -71,6 +87,7 @@ const viewElections = (elections) => {
             <th>Description</th>
             <th>Owner</th>
             <th>Options number</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>

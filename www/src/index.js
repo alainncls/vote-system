@@ -36,7 +36,7 @@ const displayLoading = () => {
     page('/', async function () {
         displayLoading()
         const elections = await directoryService.getElections()
-        const view = viewElections(elections)
+        const view = viewElections(elections, account, directoryService)
         render(layout(header(account), view, footer()), wrapper)
     })
 
