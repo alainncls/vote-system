@@ -2,7 +2,7 @@ import {ContractReceipt, ContractTransaction, Event, Signer} from 'ethers'
 import {Directory as DirectoryContractType} from "./types/ethers-contracts/Directory";
 import {Directory__factory} from "./types/ethers-contracts";
 
-let directoryJson = require('../../../blockchain/build/contracts/Directory.json')// <1>
+let directoryJson = require('../../../blockchain/build/contracts/Directory.json')
 let directoryAddress = directoryJson.networks['5777'].address
 
 class DirectoryContract {
