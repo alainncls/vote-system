@@ -14,9 +14,17 @@ class InMemoryDirectoryContract {
         return Promise.resolve()
     }
 
+    onElectionAdd(callback) {
+        this.callback = (electionAddress, electionName) => callback(electionAddress, electionName)
+    }
+
     removeElection(index) {
         this.elections.splice(index, 1)
         return Promise.resolve()
+    }
+
+    onElectionRemove(callback) {
+        this.callback = () => callback()
     }
 
     getElectionsNumber() {

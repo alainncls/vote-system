@@ -11,7 +11,7 @@ const layout = (head, content, foot) => html`
     </div>`
 
 const header = (userAddress) => {
-    const isConnected = userAddress ? 'online' : 'busy';
+    const isConnected = userAddress ? 'online' : 'busy'
 
     return html`
         <header class="navbar">
@@ -57,12 +57,22 @@ const viewElections = (elections, account, directoryService) => {
         </div>`
     }
 
+    const removeCallback = () => {
+        new Noty({
+            theme: 'light',
+            type: 'warning',
+            layout: 'topRight',
+            text: `Selected election was deleted`
+        }).show()
+        page('/')
+    }
+
     const deletionHandler = {
         async handleEvent(e) {
             e.preventDefault()
             const removeBtn = e.target
             const electionId = Number(removeBtn.dataset.electionid)
-            await directoryService.removeElectionFromIndex(electionId)
+            await directoryService.removeElectionFromIndex(electionId, removeCallback)
         },
     }
 
@@ -97,8 +107,17 @@ const viewElections = (elections, account, directoryService) => {
     </table>`
 }
 
-const viewCreateElection = (directory) => {
-    // form submission handler
+const viewCreateElection = (directoryService) => {
+    const addCallback = (electionAddress, electionName) => {
+        new Noty({
+            theme: 'light',
+            type: 'success',
+            layout: 'topRight',
+            text: `Election '${electionName} was added`
+        }).show()
+        page('/')
+    }
+
     const submitHandler = {
         async handleEvent(e) {
             e.preventDefault()
@@ -108,7 +127,7 @@ const viewCreateElection = (directory) => {
             const description = creationForm.querySelector('#election-description').value
 
             // create
-            await directory.addElection(name, description)
+            await directoryService.addElection(name, description, addCallback)
 
             // redirect to homepage
             page('/')
@@ -151,6 +170,16 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
         },
     }
 
+    const addOptionCallback = (electionAddress, electionName, optionName) => {
+        new Noty({
+            theme: 'light',
+            type: 'success',
+            layout: 'topRight',
+            text: `Option '${optionName}' was added`
+        }).show()
+        page(`/${election.address}`)
+    }
+
     const submitNewOptionHandler = {
         async handleEvent(e) {
             e.preventDefault()
@@ -158,17 +187,18 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
             const form = document.getElementById('add-options-form')
             const optionsNames = form.querySelectorAll('[name="options"]')
             const optionsDescription = form.querySelectorAll('[name="description"]')
-            const optionsToAdd = [];
+            const optionsToAdd = []
             for (let i = 0; i < optionsNames.length; i++) {
                 optionsToAdd[i] = {name: optionsNames[i].value, description: optionsDescription[i].value}
             }
             // add options
-            await electionService.addOptions(election.address, optionsToAdd)
+            await electionService.addOptions(election.address, optionsToAdd, addOptionCallback)
         },
     }
 
     const castVoteEventCallback = () => {
         new Noty({theme: 'light', type: 'success', layout: 'topRight', text: 'Your vote is confirmed'}).show()
+        page(`/${election.address}`)
     }
 
     const voteHandler = {
@@ -177,29 +207,68 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
             const voteBtn = e.target
             const optionId = voteBtn.dataset.optionid
             await electionService.castVote(election.address, optionId, castVoteEventCallback)
-            page('/' + election.address)
         },
+    }
+
+    const activationCallback = () => {
+        new Noty({
+            theme: 'light',
+            type: 'success',
+            layout: 'topRight',
+            text: `This election is now active`
+        }).show()
+        page(`/${election.address}`)
     }
 
     const activationHandler = {
         async handleEvent(e) {
             e.preventDefault()
-            await electionService.activate(election.address)
+            await electionService.activate(election.address, activationCallback)
         },
+    }
+
+    const deactivationCallback = () => {
+        new Noty({
+            theme: 'light',
+            type: 'warning',
+            layout: 'topRight',
+            text: `This election is now inactive`
+        }).show()
+        page(`/${election.address}`)
     }
 
     const deactivationHandler = {
         async handleEvent(e) {
             e.preventDefault()
-            await electionService.deactivate(election.address)
+            await electionService.deactivate(election.address, deactivationCallback)
         },
+    }
+
+    const removeCallback = () => {
+        new Noty({
+            theme: 'light',
+            type: 'warning',
+            layout: 'topRight',
+            text: `Selected election was deleted`
+        }).show()
+        page('/')
     }
 
     const deletionHandler = {
         async handleEvent(e) {
             e.preventDefault()
-            await directoryService.removeElectionFromAddress(election.address)
+            await directoryService.removeElectionFromAddress(election.address, removeCallback)
         },
+    }
+
+    const removeOptionCallback = () => {
+        new Noty({
+            theme: 'light',
+            type: 'warning',
+            layout: 'topRight',
+            text: `Selected option was deleted`
+        }).show()
+        page(`/${election.address}`)
     }
 
     const removeOptionHandler = {
@@ -207,7 +276,7 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
             e.preventDefault()
             const removeBtn = e.target
             const optionId = removeBtn.dataset.optionid
-            await electionService.removeOption(election.address, optionId)
+            await electionService.removeOption(election.address, optionId, removeOptionCallback)
         },
     }
 

@@ -19,9 +19,17 @@ class InMemoryElectionContract {
         return Promise.resolve()
     }
 
+    onOptionAdd(callback) {
+        this.callback = (electionAddress, electionName, optionName) => callback(electionAddress, electionName, optionName)
+    }
+
     removeOption(optionId) {
         this.options.splice(optionId, 1)
         return Promise.resolve()
+    }
+
+    onOptionAdd(callback) {
+        this.callback = (electionAddress, electionName) => callback(electionAddress, electionName)
     }
 
     castVote(optionId) {
@@ -30,8 +38,8 @@ class InMemoryElectionContract {
         return Promise.resolve()
     }
 
-    onVote(optionId, callback) {
-        this.callback = (address) => callback(address, optionId)
+    onVote(callback) {
+        this.callback = (electionAddress, electionName, optionName) => callback(electionAddress, electionName, optionName)
     }
 
     getVoter(index) {
@@ -55,11 +63,18 @@ class InMemoryElectionContract {
         return Promise.resolve()
     }
 
+    onActivation(callback) {
+        this.callback = (electionAddress) => callback(electionAddress)
+    }
+
     deactivate() {
         this.isActive = false
         return Promise.resolve()
     }
 
+    onDeactivation(callback) {
+        this.callback = (electionAddress) => callback(electionAddress)
+    }
 }
 
 export default InMemoryElectionContract

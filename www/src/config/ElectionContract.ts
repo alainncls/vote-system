@@ -4,7 +4,11 @@ import {Election__factory} from './types/ethers-contracts'
 import Election from '../model/Election'
 import Option from '../model/Option'
 
+export type OnOptionAddCallback = (electionAddress: string, electionName: string, optionName: string) => void
+export type OnOptionRemoveCallback = (electionAddress: string, electionName: string) => void
 export type OnVoteCallback = (electionAddress: string, electionName: string, optionName: string) => void
+export type OnActivationCallback = (electionAddress: string) => void
+export type OnDeactivationCallback = (electionAddress: string) => void
 
 class ElectionContract {
     private contract: ElectionContractType
@@ -21,11 +25,23 @@ class ElectionContract {
         return !!event
     }
 
+    onOptionAdd(callback: OnOptionAddCallback) {
+        this.contract.once('OptionAdded', (electionAddress, electionName, optionName) => {
+            callback(electionAddress, electionName, optionName)
+        })
+    }
+
     async removeOption(index: number): Promise<boolean> {
         const transaction: ContractTransaction = await this.contract.removeOption(index)
         const receipt: ContractReceipt = await transaction.wait(1)
         const event: Event = receipt.events.pop()
         return !!event
+    }
+
+    onOptionRemove(callback: OnOptionRemoveCallback) {
+        this.contract.once('OptionRemoved', (electionAddress, electionName) => {
+            callback(electionAddress, electionName)
+        })
     }
 
     async castVote(index: number): Promise<boolean> {
@@ -35,7 +51,7 @@ class ElectionContract {
         return !!event
     }
 
-    onVote(optionId: number, callback: OnVoteCallback) {
+    onVote(callback: OnVoteCallback) {
         this.contract.once('VoteCasted', (electionAddress, electionName, optionName) => {
             callback(electionAddress, electionName, optionName)
         })
@@ -57,7 +73,7 @@ class ElectionContract {
         const optionsNumber: number = await this.contract.getOptionsNumber().then(value => value.toNumber())
         const options: Option[] = []
         if (optionsNumber > 0) {
-            for (let i = 0 i < optionsNumber i++) {
+            for (let i = 0; i < optionsNumber; i++) {
                 const rawOption: any = await this.contract.options(i)
                 options.push(new Option(rawOption.name, rawOption.description, rawOption.votesCount))
             }
@@ -76,13 +92,23 @@ class ElectionContract {
         return !!event
     }
 
+    onActivation(callback: OnActivationCallback) {
+        this.contract.once('Activated', (electionAddress) => {
+            callback(electionAddress)
+        })
+    }
+
     async deactivate() {
-        console.log('ElectionContract')
         const transaction: ContractTransaction = await this.contract.deactivate()
         const receipt: ContractReceipt = await transaction.wait(1)
-        console.log('receipt', receipt)
         const event: Event = receipt.events.pop()
         return !!event
+    }
+
+    onDeactivation(callback: OnDeactivationCallback) {
+        this.contract.once('Deactivated', (electionAddress) => {
+            callback(electionAddress)
+        })
     }
 }
 

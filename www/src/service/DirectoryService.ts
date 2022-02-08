@@ -9,8 +9,9 @@ class DirectoryService {
         this.contractFactory = contractFactory
     }
 
-    async addElection(name: string, description: string): Promise<void> {
+    async addElection(name: string, description: string, eventListener: any): Promise<void> {
         const directory: DirectoryContract = this.contractFactory.getDirectoryContract()
+        directory.onElectionAdd(eventListener)
         await directory.addElection(name, description)
     }
 
@@ -27,12 +28,13 @@ class DirectoryService {
         return elections
     }
 
-    async removeElectionFromIndex(index: number): Promise<void> {
+    async removeElectionFromIndex(index: number, eventListener: any): Promise<void> {
         const directory: DirectoryContract = this.contractFactory.getDirectoryContract()
+        directory.onElectionRemove(eventListener)
         await directory.removeElection(index)
     }
 
-    async removeElectionFromAddress(address: string): Promise<void> {
+    async removeElectionFromAddress(address: string, eventListener: any): Promise<void> {
         const directory: DirectoryContract = this.contractFactory.getDirectoryContract()
         const electionsNumber = await directory.getElectionsNumber()
 
@@ -40,6 +42,7 @@ class DirectoryService {
             const electionAddress = await directory.getElectionAddress(i)
 
             if (electionAddress === address) {
+                directory.onElectionRemove(eventListener)
                 await directory.removeElection(i)
                 break
             }

@@ -2,8 +2,11 @@ import {ContractReceipt, ContractTransaction, Event, Signer} from 'ethers'
 import {Directory as DirectoryContractType} from './types/ethers-contracts/Directory'
 import {Directory__factory} from './types/ethers-contracts'
 
-let directoryJson = require('../../../blockchain/build/contracts/Directory.json')
-let directoryAddress = directoryJson.networks['5777'].address
+export type OnElectionAddCallback = (electionAddress: string, electionName: string) => void
+export type OnElectionRemoveCallback = () => void
+
+const directoryJson = require('../../../blockchain/build/contracts/Directory.json')
+const directoryAddress = directoryJson.networks['5777'].address
 
 class DirectoryContract {
     private contract: DirectoryContractType
@@ -19,11 +22,23 @@ class DirectoryContract {
         return !!event
     }
 
+    onElectionAdd(callback: OnElectionAddCallback) {
+        this.contract.once('ElectionAdded', (electionAddress, electionName) => {
+            callback(electionAddress, electionName)
+        })
+    }
+
     async removeElection(index: number): Promise<boolean> {
         const transaction: ContractTransaction = await this.contract.removeElection(index)
         const receipt: ContractReceipt = await transaction.wait(1)
         const event: Event = receipt.events.pop()
         return !!event
+    }
+
+    onElectionRemove(callback: OnElectionRemoveCallback) {
+        this.contract.once('ElectionRemoved', () => {
+            callback()
+        })
     }
 
     getElectionsNumber(): Promise<number> {

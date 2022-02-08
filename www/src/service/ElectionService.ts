@@ -15,31 +15,35 @@ class ElectionService {
         return electionContract.getDetails()
     }
 
-    async activate(electionAddress: string): Promise<void> {
+    async activate(electionAddress: string, eventListener: any): Promise<void> {
         const electionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
+        electionContract.onActivation(eventListener)
         await electionContract.activate()
     }
 
-    async deactivate(electionAddress: string): Promise<void> {
+    async deactivate(electionAddress: string, eventListener: any): Promise<void> {
         const electionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
+        electionContract.onDeactivation(eventListener)
         await electionContract.deactivate()
     }
 
-    async addOptions(electionAddress: string, options: Option[]): Promise<void> {
+    async addOptions(electionAddress: string, options: Option[], eventListener: any): Promise<void> {
         const electionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
         for (const option of options) {
+            electionContract.onOptionAdd(eventListener)
             await electionContract.addOption(option)
         }
     }
 
-    async removeOption(electionAddress: string, optionIndex: number): Promise<void> {
+    async removeOption(electionAddress: string, optionIndex: number, eventListener: any): Promise<void> {
         const electionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
+        electionContract.onOptionAdd(eventListener)
         await electionContract.removeOption(optionIndex)
     }
 
-    async castVote(electionAddress: string, optionId: number, eventVoteListener: any): Promise<void> {
+    async castVote(electionAddress: string, optionId: number, eventListener: any): Promise<void> {
         const electionContract = this.contractFactory.createElectionContractFromAddress(electionAddress)
-        electionContract.onVote(optionId, eventVoteListener)
+        electionContract.onVote(eventListener)
         await electionContract.castVote(optionId)
     }
 
