@@ -1,9 +1,9 @@
-import ContractFactory from "../config/ContractFactory";
-import DirectoryContract from "../config/DirectoryContract";
-import Election from "../model/Election";
+import ContractFactory from '../config/ContractFactory'
+import DirectoryContract from '../config/DirectoryContract'
+import Election from '../model/Election'
 
 class DirectoryService {
-    private contractFactory: ContractFactory;
+    private contractFactory: ContractFactory
 
     constructor(contractFactory: ContractFactory) {
         this.contractFactory = contractFactory

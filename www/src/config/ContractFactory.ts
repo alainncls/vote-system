@@ -1,10 +1,10 @@
-import {Signer} from "ethers";
-import DirectoryContract from "./DirectoryContract";
-import ElectionContract from "./ElectionContract";
+import {Signer} from 'ethers'
+import DirectoryContract from './DirectoryContract'
+import ElectionContract from './ElectionContract'
 
 class ContractFactory {
-    private etherSigner: Signer;
-    private directory: DirectoryContract;
+    private etherSigner: Signer
+    private directory: DirectoryContract
 
     constructor(etherSigner: Signer) {
         this.etherSigner = etherSigner

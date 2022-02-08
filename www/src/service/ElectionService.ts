@@ -1,10 +1,10 @@
-import ContractFactory from "../config/ContractFactory";
-import Election from "../model/Election";
-import Option from "../model/Option";
-import ElectionContract from "../config/ElectionContract";
+import ContractFactory from '../config/ContractFactory'
+import Election from '../model/Election'
+import Option from '../model/Option'
+import ElectionContract from '../config/ElectionContract'
 
 class ElectionService {
-    private contractFactory: ContractFactory;
+    private contractFactory: ContractFactory
 
     constructor(contractFactory: ContractFactory) {
         this.contractFactory = contractFactory
@@ -50,7 +50,7 @@ class ElectionService {
         for (let i = 0; i < votersNumber; i++) {
             voters.push(await electionContract.getVoter(i))
         }
-        return voters;
+        return voters
     }
 }
 

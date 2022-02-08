@@ -1,12 +1,12 @@
-import Option from "./Option";
+import Option from './Option'
 
 class Election {
-    private address: string;
-    private owner: string;
-    private name: string;
-    private description: string;
-    private options: Option[];
-    private isActive: boolean;
+    private address: string
+    private owner: string
+    private name: string
+    private description: string
+    private options: Option[]
+    private isActive: boolean
 
     constructor(address: string, owner: string, name: string, description: string, options: Option[], isActive: boolean) {
         this.address = address

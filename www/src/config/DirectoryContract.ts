@@ -1,12 +1,12 @@
 import {ContractReceipt, ContractTransaction, Event, Signer} from 'ethers'
-import {Directory as DirectoryContractType} from "./types/ethers-contracts/Directory";
-import {Directory__factory} from "./types/ethers-contracts";
+import {Directory as DirectoryContractType} from './types/ethers-contracts/Directory'
+import {Directory__factory} from './types/ethers-contracts'
 
 let directoryJson = require('../../../blockchain/build/contracts/Directory.json')
 let directoryAddress = directoryJson.networks['5777'].address
 
 class DirectoryContract {
-    private contract: DirectoryContractType;
+    private contract: DirectoryContractType
 
     constructor(etherSigner: Signer) {
         this.contract = Directory__factory.connect(directoryAddress, etherSigner)
@@ -16,14 +16,14 @@ class DirectoryContract {
         const transaction: ContractTransaction = await this.contract.addElection(name, description)
         const receipt: ContractReceipt = await transaction.wait(1)
         const event: Event = receipt.events.pop()
-        return !!event;
+        return !!event
     }
 
     async removeElection(index: number): Promise<boolean> {
         const transaction: ContractTransaction = await this.contract.removeElection(index)
         const receipt: ContractReceipt = await transaction.wait(1)
         const event: Event = receipt.events.pop()
-        return !!event;
+        return !!event
     }
 
     getElectionsNumber(): Promise<number> {

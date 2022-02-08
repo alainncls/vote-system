@@ -1,11 +1,20 @@
 import page from 'page'
 import EtherProvider from './config/EtherProvider'
 import ContractFactory from './config/ContractFactory'
-import DirectoryService from "./service/DirectoryService";
-import ElectionService from "./service/ElectionService";
+import DirectoryService from './service/DirectoryService'
+import ElectionService from './service/ElectionService'
 
 import {render} from 'lit-html'
-import {footer, header, layout, viewCreateElection, viewDisplayElection, viewElections, viewLoading, viewNotFound} from './view'
+import {
+    footer,
+    header,
+    layout,
+    viewCreateElection,
+    viewDisplayElection,
+    viewElections,
+    viewLoading,
+    viewNotFound
+} from './view'
 
 // notifications
 import 'noty/lib/noty.css'
@@ -15,11 +24,11 @@ import 'noty/lib/themes/light.css'
 const wrapper = document.querySelector('#app')
 
 const displayLoading = () => {
-        render(layout(header(), viewLoading(), footer()), wrapper)
-    }
+    render(layout(header(), viewLoading(), footer()), wrapper)
+}
 
 // bootstrap
-;(async function () {
+(async function () {
     displayLoading()
 
     // provider
@@ -54,7 +63,7 @@ const displayLoading = () => {
         const election = await electionService.getElection(electionAddress)
         const voters = await electionService.getVoters(electionAddress)
         const hasVoted = voters.includes(account)
-        const isOwner = election.getOwner() === account;
+        const isOwner = election.getOwner() === account
         const view = viewDisplayElection(election, electionService, hasVoted, isOwner, directoryService)
         render(layout(header(account), view, footer()), wrapper)
     })

@@ -1,6 +1,6 @@
 import {html} from 'lit-html'
 import page from 'page'
-import Noty from "noty";
+import Noty from 'noty'
 
 // bind app
 const layout = (head, content, foot) => html`
@@ -68,7 +68,8 @@ const viewElections = (elections, account, directoryService) => {
 
     const rows = elections.map((election, index) => {
         const removeBtn = election.owner === account ? html`
-            <button type="submit" class="btn" data-electionid="${index}" @click=${deletionHandler}>Delete</button>` : html`Only owner can delete`
+            <button type="submit" class="btn" data-electionid="${index}" @click=${deletionHandler}>Delete
+            </button>` : html`Only owner can delete`
         return html`
             <tr>
                 <td><a href="/${election.address}">${election.name}</a></td>
@@ -118,9 +119,16 @@ const viewCreateElection = (directory) => {
     <form id="creation-election-form">
 
         <div class="form-group form-horizontal option">
-            <label class="form-label form-inline" for="election-name"><input name="name" class="form-input form-inline" type="text" id="election-name" placeholder="Name"/></label>
-            <label class="form-label form-inline" for="election-description"><input name="description" class="form-input form-inline" type="text" id="election-description" placeholder="Description"/></label>
-            <button class="btn btn-primary form-inline" id="create-submit" @click=${submitHandler}>Create election</button>
+            <label class="form-label form-inline" for="election-name"><input name="name" class="form-input form-inline"
+                                                                             type="text" id="election-name"
+                                                                             placeholder="Name"/></label>
+            <label class="form-label form-inline" for="election-description"><input name="description"
+                                                                                    class="form-input form-inline"
+                                                                                    type="text"
+                                                                                    id="election-description"
+                                                                                    placeholder="Description"/></label>
+            <button class="btn btn-primary form-inline" id="create-submit" @click=${submitHandler}>Create election
+            </button>
         </div>
 
     </form>`
@@ -205,11 +213,13 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
 
     const rows = election.options.map((option, index) => {
         const isActive = election.isActive ? html`
-            <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote</button>` : html`Election is inactive`
+            <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote
+            </button>` : html`Election is inactive`
         const voteBtn = !hasVoted ? html`
             ${isActive}` : html`Vote already cast`
         const removeBtn = isOwner ? html`
-            <button type="submit" class="btn" data-optionid="${index}" @click=${removeOptionHandler}>Delete</button>` : html`Only owner can delete`
+            <button type="submit" class="btn" data-optionid="${index}" @click=${removeOptionHandler}>Delete
+            </button>` : html`Only owner can delete`
 
         return html`
             <tr>
@@ -222,32 +232,44 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
             </tr>`
     })
 
-    const ownership = isOwner ? html`<p>✅ You are the owner of this election</p>` : html`<p>${election.owner} is the owner of this election</p>`
+    const ownership = isOwner ? html`<p>✅ You are the owner of this election</p>` : html`<p>${election.owner} is the
+        owner of this election</p>`
 
-    const alreadyVoted = hasVoted ? html`<p><span class="text-error">⚠️</span> You've already cast your vote</p>` : html`<p>✅ You can vote on this election</p>`
+    const alreadyVoted = hasVoted ? html`<p><span class="text-error">⚠️</span> You've already cast your vote
+    </p>` : html`<p>✅ You can vote on this election</p>`
 
-    const hasOptions = !election.options || election.options.length === 0 ? html`<p>🚨 There isn't any vote option for this election</p>` : ''
+    const hasOptions = !election.options || election.options.length === 0 ? html`<p>🚨 There isn't any vote option for
+        this election</p>` : ''
 
     const manageOptions = isOwner ? html`
         <form id="add-options-form">
             <div class="options">
                 <div class="form-group form-horizontal option">
-                    <label class="form-label form-inline" for="option"><input name="options" class="form-input form-inline" type="text" id="option" placeholder="Name"/></label>
-                    <label class="form-label form-inline" for="description"><input name="description" class="form-input form-inline" type="text" id="description" placeholder="Description"/></label>
+                    <label class="form-label form-inline" for="option"><input name="options"
+                                                                              class="form-input form-inline" type="text"
+                                                                              id="option" placeholder="Name"/></label>
+                    <label class="form-label form-inline" for="description"><input name="description"
+                                                                                   class="form-input form-inline"
+                                                                                   type="text" id="description"
+                                                                                   placeholder="Description"/></label>
                 </div>
             </div>
-            <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add more options</button>
+            <button class="btn btn-sm" id="add-option" @click=${addOptionHandler}><i class="icon icon-plus"></i>Add more
+                options
+            </button>
             <button class="btn btn-primary" @click=${submitNewOptionHandler}>Add these options to the election</button>
         </form>` : html`<p><span class="text-error">⚠️</span> Only owner can add options</p>`
 
     const activationToggle = election.isActive ? html`
-        <button class="btn btn-error mgmt-button" @click=${deactivationHandler}>Deactivate this election</button>` : html`
+        <button class="btn btn-error mgmt-button" @click=${deactivationHandler}>Deactivate this election
+        </button>` : html`
         <button class="btn btn-success mgmt-button" @click=${activationHandler}>Activate this election</button>`
 
     const deleteElection = html`
         <button class="btn btn-error mgmt-button" @click=${deletionHandler}>Delete this election</button>`
 
-    const manageElection = isOwner ? html`${activationToggle} ${deleteElection}` : html`<p><span class="text-error">⚠️</span> Only owner can manage this election</p>`
+    const manageElection = isOwner ? html`${activationToggle} ${deleteElection}` : html`<p><span
+            class="text-error">⚠️</span> Only owner can manage this election</p>`
 
     return html`<h1>Options in election "${election.name}"</h1>
     <h2>${election.description}</h2>
