@@ -8,6 +8,7 @@ contract Election {
     string public description;
     address[] public voters;
     bool public isActive;
+    uint public endDate;
     Option[] public options;
 
     struct Option {
@@ -22,10 +23,11 @@ contract Election {
     event Activated(address indexed electionAddress);
     event Deactivated(address indexed electionAddress);
 
-    constructor(address _owner, string memory _name, string memory _description) {
+    constructor(address _owner, string memory _name, string memory _description, uint _endDate) {
         owner = _owner;
         name = _name;
         description = _description;
+        endDate = _endDate;
         isActive = true;
     }
 
@@ -42,7 +44,7 @@ contract Election {
         emit OptionRemoved(address(this), name);
     }
 
-    function castVote(uint _index) public isElectionActive hasNotVoted optionExists(_index) {
+    function castVote(uint _index) public isElectionActive isBeforeEndDate hasNotVoted optionExists(_index) {
         options[_index].votesCount++;
         voters.push(msg.sender);
         emit VoteCasted(address(this), name, options[_index].name);
@@ -92,6 +94,11 @@ contract Election {
 
     modifier isElectionActive {
         require(isActive, "This election isn't active");
+        _;
+    }
+
+    modifier isBeforeEndDate {
+        require(block.timestamp < endDate, "This election has ended");
         _;
     }
 }

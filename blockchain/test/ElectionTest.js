@@ -4,15 +4,18 @@ const truffleAssert = require('truffle-assertions');
 contract('Election', function (accounts) {
     const [firstAccount, secondAccount] = accounts;
     let election;
+    const futureDateInSecs = Math.floor(new Date().getTime() / 1000) + (24 * 3600);
+    const pastDateInSecs = Math.floor(new Date().getTime() / 1000) - (24 * 3600);
 
     beforeEach('should setup the contract instance', async () => {
-        election = await Election.new(firstAccount, 'ElectionService name', 'ElectionService description');
+        election = await Election.new(firstAccount, 'ElectionService name', 'ElectionService description', futureDateInSecs);
     });
 
     it('should initialize the empty election', async () => {
         assert.equal(await election.owner(), firstAccount, 'ElectionService owner should be its deployer');
         assert.equal(await election.name(), 'ElectionService name', 'ElectionService name should be saved');
         assert.equal(await election.description(), 'ElectionService description', 'ElectionService description should be saved');
+        assert.equal(await election.endDate(), futureDateInSecs, 'Election end date" should be saved');
         assert.equal(await election.getVotersNumber(), 0, 'At first, the election should not contain any voter');
         assert.equal(await election.isActive(), true, 'ElectionService should be active');
         assert.equal(await election.getOptionsNumber(), 0, 'At first, the election should not contain any option');
@@ -113,6 +116,12 @@ contract('Election', function (accounts) {
         await truffleAssert.reverts(election.castVote(0), 'This election isn\'t active');
     })
 
+    it('should fail if trying to vote after the election\'s end date', async () => {
+        election = await Election.new(firstAccount, 'ElectionService name', 'ElectionService description', pastDateInSecs);
+
+        await truffleAssert.reverts(election.castVote(0), 'This election has ended');
+    })
+
     it('should fail if non-owner tries to add an option', async () => {
         await truffleAssert.reverts(election.addOption('Option 1', 'Description 1', {from: secondAccount}), 'Only owner can do this');
     })
@@ -126,14 +135,14 @@ contract('Election', function (accounts) {
         const deactivationTx = await election.deactivate();
 
         assert.equal(await election.isActive(), false, 'ElectionService should be inactive');
-        truffleAssert.eventEmitted(deactivationTx, 'Deactivated', (ev) => {
+        truffleAssert.eventEmitted(deactivationTx, 'Deactivated', () => {
             return true;
         });
 
         const activationTx = await election.activate();
 
         assert.equal(await election.isActive(), true, 'ElectionService should be active');
-        truffleAssert.eventEmitted(activationTx, 'Activated', (ev) => {
+        truffleAssert.eventEmitted(activationTx, 'Activated', () => {
             return true;
         });
     })

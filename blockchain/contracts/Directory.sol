@@ -10,8 +10,8 @@ contract Directory {
     event ElectionAdded(address indexed electionAddress, string electionName);
     event ElectionRemoved();
 
-    function addElection(string memory _name, string memory _description) public {
-        Election election = new Election(msg.sender, _name, _description);
+    function addElection(string memory _name, string memory _description, uint _endDate) public {
+        Election election = new Election(msg.sender, _name, _description, _endDate);
         address electionAddress = address(election);
         elections.push(electionAddress);
         emit ElectionAdded(electionAddress, _name);

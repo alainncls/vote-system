@@ -8,6 +8,7 @@ const SECOND_ELECTION_DESCRIPTION = 'Description_2'
 
 contract('Directory', function () {
     let directory;
+    const futureDateInSecs = Math.floor(new Date().getTime() / 1000) + (24 * 3600);
 
     beforeEach('should setup the contract instance', async () => {
         directory = await Directory.new();
@@ -18,7 +19,7 @@ contract('Directory', function () {
     })
 
     it('should add elections and emit an event', async () => {
-        let tx = await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION);
+        let tx = await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION, futureDateInSecs);
         assert.equal(await directory.getElectionsNumber(), 1, 'After an election is added, the directory should contain 1 election');
         assert.isNotNull(await directory.elections(0), 'After an election is added, the directory should contain the address of this election');
 
@@ -26,7 +27,7 @@ contract('Directory', function () {
             return ev.electionName === FIRST_ELECTION_NAME;
         });
 
-        tx = await directory.addElection(SECOND_ELECTION_NAME, SECOND_ELECTION_DESCRIPTION);
+        tx = await directory.addElection(SECOND_ELECTION_NAME, SECOND_ELECTION_DESCRIPTION, futureDateInSecs);
         assert.equal(await directory.getElectionsNumber(), 2, 'After a second election is added, the directory should contain 2 elections');
         assert.isNotNull(await directory.elections(1), 'After a second election is added, the directory should also contain the address of this election');
 
@@ -36,8 +37,8 @@ contract('Directory', function () {
     })
 
     it('should remove elections and emit an event', async () => {
-        await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION);
-        await directory.addElection(SECOND_ELECTION_NAME, SECOND_ELECTION_DESCRIPTION);
+        await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION, futureDateInSecs);
+        await directory.addElection(SECOND_ELECTION_NAME, SECOND_ELECTION_DESCRIPTION, futureDateInSecs);
 
         let tx = await directory.removeElection(0);
         assert.equal(await directory.getElectionsNumber(), 1, 'After a deletion, the directory should contain only 1 election');
@@ -56,7 +57,7 @@ contract('Directory', function () {
     })
 
     it('should fail if trying to remove a non-existing election', async () => {
-        await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION);
+        await directory.addElection(FIRST_ELECTION_NAME, FIRST_ELECTION_DESCRIPTION, futureDateInSecs);
 
         await truffleAssert.reverts(directory.removeElection(1), 'Election index out of bound');
     })
