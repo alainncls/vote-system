@@ -9,10 +9,10 @@ class DirectoryService {
         this.contractFactory = contractFactory
     }
 
-    async addElection(name: string, description: string, eventListener: any): Promise<void> {
+    async addElection(name: string, description: string, endDate: number, eventListener: any): Promise<void> {
         const directory: DirectoryContract = this.contractFactory.getDirectoryContract()
         directory.onElectionAdd(eventListener)
-        await directory.addElection(name, description)
+        await directory.addElection(name, description, endDate)
     }
 
     async getElections(): Promise<Election[]> {

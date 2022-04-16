@@ -33,6 +33,3 @@ This DApp is composed of 2 main folders:
 4. The webapp is available at http://localhost:8080/
 
 ## To Do
-
-* Owner of an election can set an ending date for the poll
-* Split views in different files?

@@ -3,6 +3,9 @@ import {BigNumber} from "ethers";
 import InMemoryElectionContract from "./InMemoryElectionContract";
 import Option from "../src/model/Option";
 
+const futureDateInSecs = Math.floor(new Date().getTime() / 1000) + (24 * 3600);
+const pastDateInSecs = Math.floor(new Date().getTime() / 1000) - (24 * 3600);
+
 class InMemoryDirectoryContract {
     constructor() {
         this.elections = []
@@ -38,14 +41,14 @@ class InMemoryDirectoryContract {
     withActiveElection(etherSigner, electionName, electionDescription) {
         let address = hexlify(this.elections.length);
         this.elections.push(address)
-        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription, true))
+        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription, true, futureDateInSecs))
         return address
     }
 
     withInactiveElection(etherSigner, electionName, electionDescription) {
         let address = hexlify(this.elections.length);
         this.elections.push(address)
-        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription, false))
+        this.electionsContracts.push(new InMemoryElectionContract(etherSigner, electionName, electionDescription, false, futureDateInSecs))
         return address
     }
 

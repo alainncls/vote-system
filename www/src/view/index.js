@@ -85,6 +85,7 @@ const viewElections = (elections, account, directoryService) => {
                 <td><a href="/${election.address}">${election.name}</a></td>
                 <td>${election.description}</td>
                 <td>${election.owner}</td>
+                <td>${new Date(election.endDate * 1000).toISOString().substring(0, 16)}</td>
                 <td>${election.options.length}</td>
                 <td>${removeBtn}</td>
             </tr>`
@@ -97,6 +98,7 @@ const viewElections = (elections, account, directoryService) => {
             <th>Name</th>
             <th>Description</th>
             <th>Owner</th>
+            <th>End date</th>
             <th>Options number</th>
             <th>Delete</th>
         </tr>
@@ -113,7 +115,7 @@ const viewCreateElection = (directoryService) => {
             theme: 'light',
             type: 'success',
             layout: 'topRight',
-            text: `Election '${electionName} was added`
+            text: `Election '${electionName}' was added`
         }).show()
         page('/')
     }
@@ -125,9 +127,11 @@ const viewCreateElection = (directoryService) => {
             const creationForm = document.getElementById('creation-election-form')
             const name = creationForm.querySelector('#election-name').value
             const description = creationForm.querySelector('#election-description').value
+            let endDate = creationForm.querySelector('#election-end-date').value
+            endDate = Math.floor(new Date(endDate).getTime() / 1000);
 
             // create
-            await directoryService.addElection(name, description, addCallback)
+            await directoryService.addElection(name, description, endDate, addCallback)
 
             // redirect to homepage
             page('/')
@@ -146,6 +150,10 @@ const viewCreateElection = (directoryService) => {
                                                                                     type="text"
                                                                                     id="election-description"
                                                                                     placeholder="Description"/></label>
+            <label class="form-label form-inline" for="election-end-date"><input name="description"
+                                                                                 class="form-input form-inline"
+                                                                                 type="datetime-local"
+                                                                                 id="election-end-date"/></label>
             <button class="btn btn-primary form-inline" id="create-submit" @click=${submitHandler}>Create election
             </button>
         </div>
@@ -281,9 +289,9 @@ const viewDisplayElection = (election, electionService, hasVoted, isOwner, direc
     }
 
     const rows = election.options.map((option, index) => {
-        const isActive = election.isActive ? html`
+        const isActive = election.isActive && election.endDate > Math.floor(new Date().getTime() / 1000) ? html`
             <button type="submit" class="btn" data-optionid="${index}" @click=${voteHandler}>Vote
-            </button>` : html`Election is inactive`
+            </button>` : html`Election is inactive or has ended`
         const voteBtn = !hasVoted ? html`
             ${isActive}` : html`Vote already cast`
         const removeBtn = isOwner ? html`

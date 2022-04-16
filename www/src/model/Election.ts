@@ -5,16 +5,18 @@ class Election {
     private owner: string
     private name: string
     private description: string
+    private endDate: number
     private options: Option[]
     private isActive: boolean
 
-    constructor(address: string, owner: string, name: string, description: string, options: Option[], isActive: boolean) {
+    constructor(address: string, owner: string, name: string, description: string, options: Option[], isActive: boolean, endDate: number) {
         this.address = address
         this.owner = owner
         this.name = name
         this.description = description
         this.options = options
         this.isActive = isActive
+        this.endDate = endDate
     }
 
     addOption(option: Option): void {

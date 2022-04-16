@@ -1,4 +1,4 @@
-import {ContractReceipt, ContractTransaction, Event, Signer} from 'ethers'
+import {BigNumber, ContractReceipt, ContractTransaction, Event, Signer} from 'ethers'
 import {Directory as DirectoryContractType} from './types/ethers-contracts/Directory'
 import {Directory__factory} from './types/ethers-contracts'
 
@@ -15,15 +15,15 @@ class DirectoryContract {
         this.contract = Directory__factory.connect(directoryAddress, etherSigner)
     }
 
-    async addElection(name: string, description: string): Promise<boolean> {
-        const transaction: ContractTransaction = await this.contract.addElection(name, description)
+    async addElection(name: string, description: string, endDate: number): Promise<boolean> {
+        const transaction: ContractTransaction = await this.contract.addElection(name, description, endDate)
         const receipt: ContractReceipt = await transaction.wait(1)
         const event: Event = receipt.events.pop()
         return !!event
     }
 
     onElectionAdd(callback: OnElectionAddCallback) {
-        this.contract.once('ElectionAdded', (electionAddress, electionName) => {
+        this.contract.once('ElectionAdded', (electionAddress: string, electionName: string) => {
             callback(electionAddress, electionName)
         })
     }
@@ -42,7 +42,7 @@ class DirectoryContract {
     }
 
     getElectionsNumber(): Promise<number> {
-        return this.contract.getElectionsNumber().then(value => value.toNumber())
+        return this.contract.getElectionsNumber().then((value: BigNumber) => value.toNumber())
     }
 
     async getElectionAddress(index: number): Promise<string> {

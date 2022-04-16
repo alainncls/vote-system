@@ -3,10 +3,11 @@ import {BigNumber} from "ethers";
 import Election from "../src/model/Election";
 
 class InMemoryElectionContract {
-    constructor(owner, name, description, isActive) {
+    constructor(owner, name, description, isActive, endDate) {
         this.owner = owner;
         this.name = name;
         this.description = description;
+        this.endDate = endDate;
         this.voters = [];
         this.isActive = isActive;
         this.options = [];

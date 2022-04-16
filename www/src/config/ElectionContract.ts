@@ -1,4 +1,4 @@
-import {ContractReceipt, ContractTransaction, Event, Signer} from 'ethers'
+import {BigNumber, ContractReceipt, ContractTransaction, Event, Signer} from 'ethers'
 import {Election as ElectionContractType} from './types/ethers-contracts/Election'
 import {Election__factory} from './types/ethers-contracts'
 import Election from '../model/Election'
@@ -26,7 +26,7 @@ class ElectionContract {
     }
 
     onOptionAdd(callback: OnOptionAddCallback) {
-        this.contract.once('OptionAdded', (electionAddress, electionName, optionName) => {
+        this.contract.once('OptionAdded', (electionAddress: string, electionName: string, optionName: string) => {
             callback(electionAddress, electionName, optionName)
         })
     }
@@ -39,7 +39,7 @@ class ElectionContract {
     }
 
     onOptionRemove(callback: OnOptionRemoveCallback) {
-        this.contract.once('OptionRemoved', (electionAddress, electionName) => {
+        this.contract.once('OptionRemoved', (electionAddress: string, electionName: string) => {
             callback(electionAddress, electionName)
         })
     }
@@ -52,17 +52,17 @@ class ElectionContract {
     }
 
     onVote(callback: OnVoteCallback) {
-        this.contract.once('VoteCasted', (electionAddress, electionName, optionName) => {
+        this.contract.once('VoteCasted', (electionAddress: string, electionName: string, optionName: string) => {
             callback(electionAddress, electionName, optionName)
         })
     }
 
     getOptionsNumber(): Promise<number> {
-        return this.contract.getOptionsNumber().then(value => value.toNumber())
+        return this.contract.getOptionsNumber().then((value: BigNumber) => value.toNumber())
     }
 
     getVotersNumber(): Promise<number> {
-        return this.contract.getVotersNumber().then(value => value.toNumber())
+        return this.contract.getVotersNumber().then((value: BigNumber) => value.toNumber())
     }
 
     async getVoter(index: number): Promise<string> {
@@ -78,7 +78,7 @@ class ElectionContract {
                 options.push(new Option(rawOption.name, rawOption.description, rawOption.votesCount))
             }
         }
-        return new Election(this.contract.address, await this.contract.owner(), await this.contract.name(), await this.contract.description(), options, await this.contract.isActive())
+        return new Election(this.contract.address, await this.contract.owner(), await this.contract.name(), await this.contract.description(), options, await this.contract.isActive(), await this.contract.endDate().then((value: BigNumber) => value.toNumber()))
     }
 
     async getOwner(): Promise<string> {
@@ -93,7 +93,7 @@ class ElectionContract {
     }
 
     onActivation(callback: OnActivationCallback) {
-        this.contract.once('Activated', (electionAddress) => {
+        this.contract.once('Activated', (electionAddress: string) => {
             callback(electionAddress)
         })
     }
@@ -106,7 +106,7 @@ class ElectionContract {
     }
 
     onDeactivation(callback: OnDeactivationCallback) {
-        this.contract.once('Deactivated', (electionAddress) => {
+        this.contract.once('Deactivated', (electionAddress: string) => {
             callback(electionAddress)
         })
     }
