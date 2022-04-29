@@ -24,6 +24,7 @@ This DApp is composed of 2 main folders:
 2. Start Ganache
 3. Test the contracts with `truffle test`
 4. Deploy the contract via `truffle migrate`
+5. Generate the TypeScript interfaces for the contracts with `npm run types`
 
 ### Web application part
 
@@ -33,3 +34,5 @@ This DApp is composed of 2 main folders:
 4. The webapp is available at http://localhost:8080/
 
 ## To Do
+
+_Nothing at the moment_
