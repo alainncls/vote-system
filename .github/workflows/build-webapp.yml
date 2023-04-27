@@ -1,0 +1,26 @@
+name: Build WebApp
+
+on: [push]
+
+jobs:
+  build-webapp:
+
+    name: Build web application
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup NodeJS 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Show NodeJS version
+        run: npm --version
+
+      - name: Install Dependencies
+        run: cd www && npm ci
+
+      - name: Run tests
+        run: cd www && npm run test
