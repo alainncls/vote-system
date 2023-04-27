@@ -1,6 +1,7 @@
 # Vote System
 
-[![Build](https://github.com/alainncls/vote-system/actions/workflows/pipeline.yml/badge.svg)](https://github.com/alainncls/vote-system/actions/workflows/pipeline.yml)
+[![Build Contracts](https://github.com/alainncls/vote-system/actions/workflows/build-contracts.yml/badge.svg)](https://github.com/alainncls/vote-system/actions/workflows/build-contracts.yml)
+[![Build WebApp](https://github.com/alainncls/vote-system/actions/workflows/build-webapp.yml/badge.svg)](https://github.com/alainncls/vote-system/actions/workflows/build-webapp.yml)
 [![Coverage Status](https://coveralls.io/repos/github/alainncls/vote-system/badge.svg?branch=main)](https://coveralls.io/github/alainncls/vote-system?branch=main)
 
 This project aims to provide a DApp sample.  
