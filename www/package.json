@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "core-js": "^3.32.0",
-    "ethers": "^5.5.2",
+    "ethers": "^6.7.0",
     "lit-html": "^2.7.5",
     "noty": "^3.2.0-beta",
     "page": "^1.11.6"
