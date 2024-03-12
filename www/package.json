@@ -15,7 +15,7 @@
   "author": "Alain Nicolas",
   "license": "ISC",
   "dependencies": {
-    "core-js": "^3.35.1",
+    "core-js": "^3.36.0",
     "ethers": "^5.5.2",
     "lit-html": "^3.1.2",
     "noty": "^3.2.0-beta",
